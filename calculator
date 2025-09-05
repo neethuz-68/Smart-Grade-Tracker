@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+public class CGPACalculator {
+
+    public static double calculateCGPA(double[] marks) {
+        double sumGrades = 0.0;
+        for (double mark : marks) {
+            sumGrades += mark / 10.0;
+        }
+        return sumGrades / marks.length;
+    }
+
+    public static double cgpaToPercentage(double cgpa) {
+        return cgpa * 9.5;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter number of subjects: ");
+        int n = scanner.nextInt();
+
+        double[] marks = new double[n];
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter marks for subject " + (i + 1) + " (out of 100): ");
+            marks[i] = scanner.nextDouble();
+        }
+
+        double cgpa = calculateCGPA(marks);
+        double percentage = cgpaToPercentage(cgpa);
+
+        System.out.printf("\nCalculated CGPA: %.2f%n", cgpa);
+        System.out.printf("Estimated Percentage: %.2f%%%n", percentage);
+
+        scanner.close();
+    }
+}
