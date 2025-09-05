@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 
-// Gradient background panel
 class GradientPanel extends JPanel {
     private Color c1, c2;
 
@@ -20,13 +19,12 @@ class GradientPanel extends JPanel {
     }
 }
 
-public class ModernLoginUI {
+public class LoginUI {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(LoginPage::new);
     }
 }
 
-// ---------------- LOGIN PAGE ----------------
 class LoginPage extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
@@ -50,14 +48,12 @@ class LoginPage extends JFrame {
             BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
 
-        // LEFT (Image placeholder)
         JLabel imageLabel = new JLabel("IMAGE", SwingConstants.CENTER);
         imageLabel.setPreferredSize(new Dimension(300, 400));
         imageLabel.setOpaque(true);
         imageLabel.setBackground(new Color(245, 245, 245));
         card.add(imageLabel, BorderLayout.WEST);
 
-        // RIGHT (Form)
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(Color.WHITE);
 
@@ -69,8 +65,7 @@ class LoginPage extends JFrame {
         title.setFont(new Font("Verdana", Font.BOLD, 22));
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         formPanel.add(title, gbc);
-
-        // Username
+        
         gbc.gridwidth = 1;
         gbc.gridy++;
         JLabel userLabel = new JLabel("Username:");
@@ -83,7 +78,6 @@ class LoginPage extends JFrame {
         gbc.gridx = 1;
         formPanel.add(usernameField, gbc);
 
-        // Password
         gbc.gridy++;
         JLabel passLabel = new JLabel("Password:");
         passLabel.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -95,7 +89,6 @@ class LoginPage extends JFrame {
         gbc.gridx = 1;
         formPanel.add(passwordField, gbc);
 
-        // Login button
         gbc.gridy++;
         gbc.gridx = 0; gbc.gridwidth = 2;
         JButton loginButton = new JButton("Log In");
@@ -107,7 +100,6 @@ class LoginPage extends JFrame {
         loginButton.setPreferredSize(new Dimension(250, 40));
         formPanel.add(loginButton, gbc);
 
-        // Register link
         gbc.gridy++;
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         bottomPanel.setBackground(Color.WHITE);
@@ -134,7 +126,6 @@ class LoginPage extends JFrame {
     }
 }
 
-// ---------------- REGISTER PAGE ----------------
 class RegisterPage extends JFrame {
     private JTextField usernameField, emailField;
     private JPasswordField passwordField, confirmPasswordField;
@@ -165,7 +156,6 @@ class RegisterPage extends JFrame {
         imageLabel.setBackground(new Color(245, 245, 245));
         card.add(imageLabel, BorderLayout.WEST);
 
-        // RIGHT (Form)
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(Color.WHITE);
 
@@ -178,7 +168,6 @@ class RegisterPage extends JFrame {
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         formPanel.add(title, gbc);
 
-        // Username
         gbc.gridwidth = 1;
         gbc.gridy++;
         JLabel userLabel = new JLabel("Username:");
@@ -190,7 +179,6 @@ class RegisterPage extends JFrame {
         gbc.gridx = 1;
         formPanel.add(usernameField, gbc);
 
-        // Email
         gbc.gridy++;
         JLabel emailLabel = new JLabel("Email:");
         gbc.gridx = 0;
@@ -201,7 +189,6 @@ class RegisterPage extends JFrame {
         gbc.gridx = 1;
         formPanel.add(emailField, gbc);
 
-        // Password
         gbc.gridy++;
         JLabel passLabel = new JLabel("Password:");
         gbc.gridx = 0;
@@ -212,7 +199,6 @@ class RegisterPage extends JFrame {
         gbc.gridx = 1;
         formPanel.add(passwordField, gbc);
 
-        // Confirm Password
         gbc.gridy++;
         JLabel confirmLabel = new JLabel("Confirm:");
         gbc.gridx = 0;
@@ -223,7 +209,6 @@ class RegisterPage extends JFrame {
         gbc.gridx = 1;
         formPanel.add(confirmPasswordField, gbc);
 
-        // Register button
         gbc.gridy++;
         gbc.gridx = 0; gbc.gridwidth = 2;
         JButton registerBtn = new JButton("Register");
@@ -235,7 +220,6 @@ class RegisterPage extends JFrame {
         registerBtn.setPreferredSize(new Dimension(250, 40));
         formPanel.add(registerBtn, gbc);
 
-        // Login link
         gbc.gridy++;
         JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         loginPanel.setBackground(Color.WHITE);
@@ -261,3 +245,4 @@ class RegisterPage extends JFrame {
         setVisible(true);
     }
 }
+
