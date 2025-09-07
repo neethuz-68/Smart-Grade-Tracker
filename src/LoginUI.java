@@ -1,25 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
 
-class GradientPanel extends JPanel {
-    private Color c1, c2;
+class ImageBackgroundPanel extends JPanel {
+    private Image backgroundImage;
 
-    public GradientPanel(Color c1, Color c2) {
-        this.c1 = c1;
-        this.c2 = c2;
+    public ImageBackgroundPanel(String imagePath) {
+        backgroundImage = new ImageIcon(imagePath).getImage();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        GradientPaint gp = new GradientPaint(0, 0, c1, getWidth(), getHeight(), c2);
-        g2d.setPaint(gp);
-        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 }
 
-public class LoginUI {
+public class ModernLoginUI {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(LoginPage::new);
     }
@@ -30,92 +26,75 @@ class LoginPage extends JFrame {
     private JPasswordField passwordField;
 
     public LoginPage() {
-        setTitle("Login - Grade Calculator");
+        setTitle("Login");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        GradientPanel background = new GradientPanel(
-            Color.decode("#EECDA3"),
-            Color.decode("#EF629F")
-        );
+        
+        ImageBackgroundPanel background = new ImageBackgroundPanel("bg1.jpg");
         background.setLayout(new GridBagLayout());
 
+        
         JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(Color.WHITE);
-        card.setPreferredSize(new Dimension(800, 500));
-        card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)
-        ));
+        card.setBackground(new Color(255, 255, 255, 230)); // white with slight transparency
+        card.setPreferredSize(new Dimension(1000, 600));
+        card.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        
         JLabel imageLabel = new JLabel("IMAGE", SwingConstants.CENTER);
-        imageLabel.setPreferredSize(new Dimension(300, 400));
+        imageLabel.setPreferredSize(new Dimension(400, 500));
         imageLabel.setOpaque(true);
         imageLabel.setBackground(new Color(245, 245, 245));
         card.add(imageLabel, BorderLayout.WEST);
 
+        
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(Color.WHITE);
-
+        formPanel.setBackground(new Color(255, 255, 255, 200));
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(15, 10, 15, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel title = new JLabel("Sign in");
-        title.setFont(new Font("Verdana", Font.BOLD, 22));
+        JLabel title = new JLabel("Sign in to Grade Calculator");
+        title.setFont(new Font("Verdana", Font.BOLD, 24));
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         formPanel.add(title, gbc);
-        
         gbc.gridwidth = 1;
-        gbc.gridy++;
-        JLabel userLabel = new JLabel("Username:");
-        userLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        gbc.gridx = 0;
-        formPanel.add(userLabel, gbc);
 
-        usernameField = new JTextField(18);
-        usernameField.setPreferredSize(new Dimension(250, 35));
-        gbc.gridx = 1;
+        gbc.gridy++;gbc.gridx = 0;
+        formPanel.add(new JLabel("Username"), gbc);
+        gbc.gridx=1;
+        usernameField = new JTextField(20);
+        usernameField.setPreferredSize(new Dimension(250, 40));
         formPanel.add(usernameField, gbc);
 
-        gbc.gridy++;
-        JLabel passLabel = new JLabel("Password:");
-        passLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        gbc.gridx = 0;
-        formPanel.add(passLabel, gbc);
-
-        passwordField = new JPasswordField(18);
-        passwordField.setPreferredSize(new Dimension(250, 35));
-        gbc.gridx = 1;
+        
+        gbc.gridy++;gbc.gridx=0;
+        formPanel.add(new JLabel("Password"), gbc);
+        gbc.gridx=1;
+        passwordField = new JPasswordField(20);
+        passwordField.setPreferredSize(new Dimension(250, 40));
         formPanel.add(passwordField, gbc);
 
-        gbc.gridy++;
-        gbc.gridx = 0; gbc.gridwidth = 2;
+        
+        gbc.gridy++; gbc.gridx = 0; gbc.gridwidth = 2;
         JButton loginButton = new JButton("Log In");
         loginButton.setFont(new Font("Arial", Font.BOLD, 16));
         loginButton.setForeground(Color.WHITE);
         loginButton.setBackground(Color.decode("#48C9B0"));
-        loginButton.setFocusPainted(false);
-        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         loginButton.setPreferredSize(new Dimension(250, 40));
         formPanel.add(loginButton, gbc);
 
+    
         gbc.gridy++;
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        bottomPanel.setBackground(Color.WHITE);
-        JLabel noAccount = new JLabel("Don't have an account? ");
+        bottomPanel.setBackground(new Color(255, 255, 255, 0));
+        bottomPanel.add(new JLabel("Don't have an account? "));
         JButton registerButton = new JButton("Register");
         registerButton.setForeground(new Color(30, 144, 255));
-        registerButton.setFont(new Font("Arial", Font.BOLD, 16));
-        registerButton.setBorderPainted(false);
-        registerButton.setFocusPainted(false);
         registerButton.setContentAreaFilled(false);
+        registerButton.setBorderPainted(false);
         registerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        registerButton.addActionListener(e -> {
-            dispose();
-            new RegisterPage();
-        });
-        bottomPanel.add(noAccount);
+        registerButton.addActionListener(e -> { dispose(); new RegisterPage(); });
         bottomPanel.add(registerButton);
         formPanel.add(bottomPanel, gbc);
 
@@ -127,115 +106,79 @@ class LoginPage extends JFrame {
 }
 
 class RegisterPage extends JFrame {
-    private JTextField usernameField, emailField;
-    private JPasswordField passwordField, confirmPasswordField;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
 
     public RegisterPage() {
-        setTitle("Register - Grade Calculator");
+        setTitle("Register");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        GradientPanel background = new GradientPanel(
-            Color.decode("#EECDA3"),
-            Color.decode("#EF629F")
-        );
+        
+        ImageBackgroundPanel background = new ImageBackgroundPanel("bg1.jpg");
         background.setLayout(new GridBagLayout());
 
+        
         JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(Color.WHITE);
-        card.setPreferredSize(new Dimension(800, 550));
-        card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)
-        ));
+        card.setBackground(new Color(255, 255, 255, 230));
+        card.setPreferredSize(new Dimension(1000, 600));
+        card.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // LEFT (Image placeholder)
+        
         JLabel imageLabel = new JLabel("IMAGE", SwingConstants.CENTER);
-        imageLabel.setPreferredSize(new Dimension(300, 450));
+        imageLabel.setPreferredSize(new Dimension(400, 500));
         imageLabel.setOpaque(true);
         imageLabel.setBackground(new Color(245, 245, 245));
         card.add(imageLabel, BorderLayout.WEST);
 
+        
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(Color.WHITE);
-
+        formPanel.setBackground(new Color(255, 255, 255, 200));
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(15, 10, 15, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel title = new JLabel("Create New Account");
-        title.setFont(new Font("Verdana", Font.BOLD, 22));
+        title.setFont(new Font("Verdana", Font.BOLD, 24));
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         formPanel.add(title, gbc);
-
         gbc.gridwidth = 1;
-        gbc.gridy++;
-        JLabel userLabel = new JLabel("Username:");
-        gbc.gridx = 0;
-        formPanel.add(userLabel, gbc);
 
-        usernameField = new JTextField(18);
-        usernameField.setPreferredSize(new Dimension(250, 35));
+        gbc.gridy++;gbc.gridx = 0;
+        formPanel.add(new JLabel("Username"), gbc);
         gbc.gridx = 1;
+        usernameField = new JTextField(20);
+        usernameField.setPreferredSize(new Dimension(250, 40));
         formPanel.add(usernameField, gbc);
 
-        gbc.gridy++;
-        JLabel emailLabel = new JLabel("Email:");
-        gbc.gridx = 0;
-        formPanel.add(emailLabel, gbc);
-
-        emailField = new JTextField(18);
-        emailField.setPreferredSize(new Dimension(250, 35));
+        
+        gbc.gridy++; gbc.gridx = 0;
+        formPanel.add(new JLabel("Password"), gbc);
         gbc.gridx = 1;
-        formPanel.add(emailField, gbc);
-
-        gbc.gridy++;
-        JLabel passLabel = new JLabel("Password:");
-        gbc.gridx = 0;
-        formPanel.add(passLabel, gbc);
-
-        passwordField = new JPasswordField(18);
-        passwordField.setPreferredSize(new Dimension(250, 35));
-        gbc.gridx = 1;
+        passwordField = new JPasswordField(20);
+        passwordField.setPreferredSize(new Dimension(250, 40));
         formPanel.add(passwordField, gbc);
 
-        gbc.gridy++;
-        JLabel confirmLabel = new JLabel("Confirm:");
-        gbc.gridx = 0;
-        formPanel.add(confirmLabel, gbc);
-
-        confirmPasswordField = new JPasswordField(18);
-        confirmPasswordField.setPreferredSize(new Dimension(250, 35));
-        gbc.gridx = 1;
-        formPanel.add(confirmPasswordField, gbc);
-
-        gbc.gridy++;
-        gbc.gridx = 0; gbc.gridwidth = 2;
+        
+        gbc.gridy++;gbc.gridx = 0; gbc.gridwidth = 2;
         JButton registerBtn = new JButton("Register");
         registerBtn.setFont(new Font("Arial", Font.BOLD, 16));
         registerBtn.setForeground(Color.WHITE);
         registerBtn.setBackground(Color.decode("#FF69B4"));
-        registerBtn.setFocusPainted(false);
-        registerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         registerBtn.setPreferredSize(new Dimension(250, 40));
         formPanel.add(registerBtn, gbc);
 
+        
         gbc.gridy++;
         JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        loginPanel.setBackground(Color.WHITE);
-        JLabel msg = new JLabel("Already have an account? ");
+        loginPanel.setBackground(new Color(255, 255, 255, 0));
+        loginPanel.add(new JLabel("Already have an account? "));
         JButton loginBtn = new JButton("Login");
         loginBtn.setForeground(new Color(30, 144, 255));
-        loginBtn.setFont(new Font("Arial", Font.BOLD, 16));
-        loginBtn.setBorderPainted(false);
-        loginBtn.setFocusPainted(false);
         loginBtn.setContentAreaFilled(false);
+        loginBtn.setBorderPainted(false);
         loginBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        loginBtn.addActionListener(e -> {
-            dispose();
-            new LoginPage();
-        });
-        loginPanel.add(msg);
+        loginBtn.addActionListener(e -> { dispose(); new LoginPage(); });
         loginPanel.add(loginBtn);
         formPanel.add(loginPanel, gbc);
 
@@ -245,4 +188,5 @@ class RegisterPage extends JFrame {
         setVisible(true);
     }
 }
+
 
