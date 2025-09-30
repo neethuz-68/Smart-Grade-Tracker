@@ -1,17 +1,16 @@
 package ui;
 
-import models.Student;
 import db.StudentDAO;
 
 import javax.swing.*;
 import java.awt.*;
 
-class ModernLoginUI extends JFrame {
+class RegisterPage extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
 
-    public void LoginPage() {
-        setTitle("Login");
+    public RegisterPage() {
+        setTitle("Register");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -19,7 +18,7 @@ class ModernLoginUI extends JFrame {
         background.setLayout(new GridBagLayout());
 
         JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(new Color(255, 255, 255, 230)); // semi-transparent white
+        card.setBackground(new Color(255, 255, 255, 230));
         card.setPreferredSize(new Dimension(1000, 600));
         card.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -35,7 +34,7 @@ class ModernLoginUI extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(15, 10, 15, 10);
 
-        JLabel title = new JLabel("Sign in to Grade Calculator");
+        JLabel title = new JLabel("Create New Account");
         title.setFont(new Font("Verdana", Font.BOLD, 24));
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         formPanel.add(title, gbc);
@@ -55,45 +54,43 @@ class ModernLoginUI extends JFrame {
         passwordField.setPreferredSize(new Dimension(250, 40));
         formPanel.add(passwordField, gbc);
 
-        // LOGIN BUTTON
+        // REGISTER BUTTON
         gbc.gridy++; gbc.gridx = 0; gbc.gridwidth = 2;
-        JButton loginButton = new JButton("Log In");
-        loginButton.setFont(new Font("Arial", Font.BOLD, 16));
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setBackground(Color.decode("#48C9B0"));
-        loginButton.setPreferredSize(new Dimension(250, 40));
-        formPanel.add(loginButton, gbc);
+        JButton registerBtn = new JButton("Register");
+        registerBtn.setFont(new Font("Arial", Font.BOLD, 16));
+        registerBtn.setForeground(Color.WHITE);
+        registerBtn.setBackground(Color.decode("#FF69B4"));
+        registerBtn.setPreferredSize(new Dimension(250, 40));
+        formPanel.add(registerBtn, gbc);
 
-        // login button action
-        loginButton.addActionListener(e -> {
+        // register button action
+        registerBtn.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
 
             StudentDAO dao = new StudentDAO();
-            Student student = dao.authenticate(username, password);
-
-            if (student != null) {
-                JOptionPane.showMessageDialog(this, "Welcome " + student.getName() + "!");
+            if (dao.register(username, password)) {
+                JOptionPane.showMessageDialog(this, "Registration successful!");
                 dispose();
-                new DashboardPage(student); // pass logged-in student
+                new LoginPage(); // back to login
             } else {
-                JOptionPane.showMessageDialog(this, "Invalid username or password!");
+                JOptionPane.showMessageDialog(this, "Registration failed. Try another username.");
             }
         });
 
-        // REGISTER LINK
+        // LOGIN LINK
         gbc.gridy++;
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        bottomPanel.setBackground(new Color(255, 255, 255, 0));
-        bottomPanel.add(new JLabel("Don't have an account? "));
-        JButton registerButton = new JButton("Register");
-        registerButton.setForeground(new Color(30, 144, 255));
-        registerButton.setContentAreaFilled(false);
-        registerButton.setBorderPainted(false);
-        registerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        registerButton.addActionListener(e -> { dispose(); new RegisterPage(); });
-        bottomPanel.add(registerButton);
-        formPanel.add(bottomPanel, gbc);
+        JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        loginPanel.setBackground(new Color(255, 255, 255, 0));
+        loginPanel.add(new JLabel("Already have an account? "));
+        JButton loginBtn = new JButton("Login");
+        loginBtn.setForeground(new Color(30, 144, 255));
+        loginBtn.setContentAreaFilled(false);
+        loginBtn.setBorderPainted(false);
+        loginBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginBtn.addActionListener(e -> { dispose(); new LoginPage(); });
+        loginPanel.add(loginBtn);
+        formPanel.add(loginPanel, gbc);
 
         card.add(formPanel, BorderLayout.CENTER);
         background.add(card);
