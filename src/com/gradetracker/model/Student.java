@@ -1,5 +1,6 @@
-package models;
+package com.gradetracker.model;
 
+import java.util.ArrayList; // Import ArrayList
 import java.util.List;
 
 public class Student {
@@ -9,7 +10,16 @@ public class Student {
     private String password;
     private List<Semester> semesters;
 
-    // Constructor
+    // --- NEW --- Simpler constructor for new students or for login
+    public Student(int studentId, String name, String email, String password) {
+        this.studentId = studentId;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.semesters = new ArrayList<>(); // Initialize to an empty list
+    }
+
+    // Full constructor (still useful)
     public Student(int studentId, String name, String email, String password, List<Semester> semesters) {
         this.studentId = studentId;
         this.name = name;
@@ -36,6 +46,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" + "id=" + studentId + ", name='" + name + "', semesters=" + semesters.size() + "}";
+        return "Student{" + "id=" + studentId + ", name='" + name + "', semesters=" + (semesters != null ? semesters.size() : 0) + "}";
     }
 }

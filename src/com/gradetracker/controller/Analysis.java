@@ -1,8 +1,9 @@
-package services;
+package com.gradetracker.controller;
 
-import models.Semester;
-import models.Subject;
 import java.util.*;
+
+import com.gradetracker.model.Semester;
+import com.gradetracker.model.Subject;
 
 public class Analysis{
 
