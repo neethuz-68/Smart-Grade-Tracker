@@ -1,8 +1,17 @@
+package ui;
+import models.Student;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class DashboardPage extends JFrame {
-    public DashboardPage() {
+
+    private Student student; // store logged-in student
+
+    // New constructor that takes a Student
+    public DashboardPage(Student student) {
+        this.student = student; // store student
+
         setTitle("Dashboard - Grade Calculator");
         setExtendedState(JFrame.MAXIMIZED_BOTH);  
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,7 +27,8 @@ public class DashboardPage extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
 
-        JLabel title = new JLabel("Welcome to Dashboard", SwingConstants.CENTER);
+        // Display student name
+        JLabel title = new JLabel("Welcome, " + student.getName(), SwingConstants.CENTER);
         title.setFont(new Font("Verdana", Font.BOLD, 36));
         title.setForeground(new Color(44, 62, 80)); // Dark gray text
         gbc.gridy = 0;
@@ -58,7 +68,12 @@ public class DashboardPage extends JFrame {
         return btn;
     }
 
+    // Keep default constructor if you want to run it standalone
+    public DashboardPage() {
+        this(new Student(0, "Guest", "", "", null));
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(DashboardPage::new);
+        SwingUtilities.invokeLater(() -> new DashboardPage());
     }
 }
