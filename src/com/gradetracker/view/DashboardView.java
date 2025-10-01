@@ -42,6 +42,7 @@ public class DashboardView extends JFrame {
         // Add the main panel to the frame
         this.add(mainPanel);
     }
+    
 
     // --- Methods for Controllers to Add Listeners ---
 
