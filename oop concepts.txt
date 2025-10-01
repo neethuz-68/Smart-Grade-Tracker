@@ -16,7 +16,8 @@ public class Student {
 
 
 Abstraction
-Abstraction is the concept of hiding complex implementation details and showing only the essential features of an object. It simplifies the system by reducing complexity.
+Abstraction is the concept of hiding complex implementation details and showing only the essential features of an object. 
+It simplifies the system by reducing complexity.
 Project Example: Your DatabaseManager class provides a perfect example of abstraction. 
 The AuthController doesn't need to know the complex SQL queries or JDBC connection logic. 
 It simply calls a high-level method to perform an action. 

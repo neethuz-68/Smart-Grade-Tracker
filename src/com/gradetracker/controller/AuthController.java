@@ -4,17 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.gradetracker.model.Student;
-import com.gradetracker.db.DatabaseManager;
+import com.gradetracker.dao.StudentDAO;
 import com.gradetracker.view.LoginView;
 import com.gradetracker.view.DashboardView;
 
 public class AuthController implements ActionListener {
     private LoginView view;
-    private DatabaseManager dbManager;
+     private final StudentDAO studentDAO;
 
-    public AuthController(LoginView view, DatabaseManager dbManager) {
+    public AuthController(LoginView view, StudentDAO studentDAO) {
         this.view = view;
-        this.dbManager = dbManager;
+        this.studentDAO = studentDAO;
         this.view.addLoginListener(this);
     }
     
@@ -32,7 +32,7 @@ public class AuthController implements ActionListener {
             return;
         }
 
-        Student student = dbManager.validateUser(username, password);
+        Student student = studentDAO.validateUser(username, password);
 
         if (student != null) {
             // If the returned student object is not null, login is successful.
