@@ -128,7 +128,11 @@ public class LoginView extends JFrame {
 
     // --- Public methods ---
     public String getUsername() { return usernameField.getText(); }
-    public char[] getPassword() { return passwordField.getPassword(); }
+    //public char[] getPassword() { return passwordField.getPassword(); }
+    public String getPassword() {
+        // JPasswordField.getPassword() returns a char[], so we convert it.
+        return String.valueOf(passwordField.getPassword());
+    }
     public void displayMessage(String message) { JOptionPane.showMessageDialog(this, message); }
     public void clearFields() { usernameField.setText(""); passwordField.setText(""); }
     public void addLoginListener(ActionListener listener) { loginButton.addActionListener(listener); }
