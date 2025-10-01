@@ -6,74 +6,97 @@ import java.awt.*;
 
 public class DashboardPage extends JFrame {
 
-    private Student student; // store logged-in student
-
-    // New constructor that takes a Student
-    public DashboardPage(Student student) {
-        this.student = student; // store student
-
-        setTitle("Dashboard - Grade Calculator");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);  
+    public DashboardPage() {
+        setTitle("Smart Grade Tracker");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel background = new JPanel(new GridBagLayout());
-        background.setBackground(Color.WHITE);
+        // ===== Background Panel with Image =====
+        ImageIcon bgIcon = new ImageIcon("bg1.jpg"); // Replace with your background image
+        Image bgImage = bgIcon.getImage();
 
-        JPanel centerPanel = new JPanel(new GridBagLayout());
-        centerPanel.setBackground(Color.WHITE);
+        JPanel background = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(20, 20, 20, 20);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
+        // ===== NAVBAR =====
+        JPanel navbar = new JPanel(new BorderLayout());
+        navbar.setBackground(Color.WHITE);
+        navbar.setPreferredSize(new Dimension(0, 70));
 
-        // Display student name
-        JLabel title = new JLabel("Welcome, " + student.getName(), SwingConstants.CENTER);
-        title.setFont(new Font("Verdana", Font.BOLD, 36));
-        title.setForeground(new Color(44, 62, 80)); // Dark gray text
-        gbc.gridy = 0;
-        centerPanel.add(title, gbc);
+        JLabel title = new JLabel("Smart Grade Tracker");
+        title.setFont(new Font("Verdana", Font.BOLD, 22));
+        title.setForeground(Color.DARK_GRAY);
+        title.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+        navbar.add(title, BorderLayout.WEST);
 
-        JButton gradeEntryBtn = createNavButton(" Grade Entry", new Color(72, 201, 176));
-        JButton analysisBtn = createNavButton(" Analysis", new Color(52, 152, 219));
-        JButton plannerBtn = createNavButton(" Planner", new Color(231, 76, 60));
+        JButton logoutBtn = new JButton("Logout");
+        logoutBtn.setFont(new Font("Arial", Font.BOLD, 16));
+        logoutBtn.setForeground(Color.WHITE);
+        logoutBtn.setBackground(new Color(41, 128, 185));
+        logoutBtn.setFocusPainted(false);
+        logoutBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        logoutBtn.setPreferredSize(new Dimension(120, 40));
+        logoutBtn.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Logging out...");
+            dispose();
+        });
 
-        gbc.gridy = 1;
-        centerPanel.add(gradeEntryBtn, gbc);
+        JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 15));
+        logoutPanel.setOpaque(false);
+        logoutPanel.add(logoutBtn);
+        navbar.add(logoutPanel, BorderLayout.EAST);
 
-        gbc.gridy = 2;
-        centerPanel.add(analysisBtn, gbc);
+        // ===== CENTER CONTENT (Vertical Cards) =====
+        JPanel centerPanel = new JPanel(new GridLayout(3, 1, 0, 30));
+        centerPanel.setOpaque(false);
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(100, 400, 100, 400));
 
-        gbc.gridy = 3;
-        centerPanel.add(plannerBtn, gbc);
+        centerPanel.add(createNavCard("Grade Entry"));
+        centerPanel.add(createNavCard("CGPA Analysis"));
+        centerPanel.add(createNavCard("Target CGPA"));
 
-        background.add(centerPanel);
+        // Add everything
+        background.add(navbar, BorderLayout.NORTH);
+        background.add(centerPanel, BorderLayout.CENTER);
+
         add(background);
         setVisible(true);
-
-        gradeEntryBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opening Grade Entry..."));
-        analysisBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opening Analysis..."));
-        plannerBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Opening Planner..."));
     }
 
-    private JButton createNavButton(String text, Color bgColor) {
+    // ===== Helper: Create a White Card with White Button =====
+    private JPanel createNavCard(String text) {
+        JPanel card = new JPanel(new GridBagLayout());
+        card.setPreferredSize(new Dimension(300, 120));
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 2),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+        ));
+
         JButton btn = new JButton(text);
-        btn.setFont(new Font("Arial", Font.BOLD, 22));
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(bgColor);
+        btn.setFont(new Font("Arial", Font.BOLD, 20));
+        btn.setForeground(Color.DARK_GRAY); // Text dark gray
+        btn.setBackground(Color.WHITE);     // Button white
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setPreferredSize(new Dimension(300, 70));
-        btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        return btn;
-    }
+        btn.setPreferredSize(new Dimension(200, 60));
+        btn.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 2));
 
-    // Keep default constructor if you want to run it standalone
-    public DashboardPage() {
-        this(new Student(0, "Guest", "", "", null));
+        btn.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Opening " + text + "...");
+        });
+
+        card.add(btn);
+        return card;
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new DashboardPage());
+        SwingUtilities.invokeLater(DashboardPage::new);
     }
 }
+
