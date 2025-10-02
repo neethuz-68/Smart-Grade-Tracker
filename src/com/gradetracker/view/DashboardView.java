@@ -18,9 +18,10 @@ public class DashboardView extends JFrame {
     public DashboardView() {
         // --- Frame Setup ---
         setTitle("Dashboard - Smart Grade Tracker");
-        setSize(600, 400);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the window on the screen
+        setResizable(true);
+        //setLocationRelativeTo(null); // Center the window on the screen
 
         // --- UI Components ---
         JPanel mainPanel = new JPanel();
