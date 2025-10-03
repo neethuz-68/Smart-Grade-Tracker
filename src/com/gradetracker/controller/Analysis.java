@@ -1,89 +1,65 @@
 package com.gradetracker.controller;
 
-import java.util.*;
-
+import com.gradetracker.dao.SemesterDAO;
+import com.gradetracker.dao.SemesterDAOImpl;
 import com.gradetracker.model.Semester;
-import com.gradetracker.model.Subject;
+import com.gradetracker.model.Student;
+import com.gradetracker.view.AnalysisView;
 
-public class Analysis{
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-    // 1. Calculate GPA for a semester
-    public double calculateSemesterGPA(Semester sem) {
-        double totalPoints = 0;
-        double totalCredits = 0;
+/**
+ * Controller for the Analysis screen.
+ * It fetches all academic data, orchestrates the SGPA/CGPA calculations,
+ * and prepares the data for visual representation.
+ */
+public class Analysis {
 
-        for (Subject sub : sem.getSubjects()) {
-            double gradePoint = convertGradeToPoint(sub.getGrade()); // A=10, B=8, etc.
-            totalPoints += gradePoint * sub.getCredits();
-            totalCredits += sub.getCredits();
-        }
+    private final AnalysisView view;
+    private final Student currentStudent;
+    private final SemesterDAO semesterDAO;
 
-        return (totalCredits > 0) ? totalPoints / totalCredits : 0.0;
+    public Analysis(AnalysisView view, Student student) {
+        this.view = view;
+        this.currentStudent = student;
+        this.semesterDAO = new SemesterDAOImpl();
+
+        // Immediately perform the analysis when the controller is created
+        performAnalysis();
     }
 
-    // 2. Calculate CGPA across semesters
-    public double calculateCGPA(List<Semester> semesters) {
-        double totalPoints = 0;
-        double totalCredits = 0;
+    /**
+     * The main logic method for the analysis feature.
+     */
+    private void performAnalysis() {
+        // 1. Use the DAO to fetch all semester data for the logged-in student
+        List<Semester> allSemesters = semesterDAO.getAllSemestersForStudent(currentStudent.getStudentId());
+        
+        // 2. Update the student object with their full academic history
+        currentStudent.setSemesters(allSemesters);
 
-        for (Semester sem : semesters) {
-            for (Subject sub : sem.getSubjects()) {
-                double gradePoint = convertGradeToPoint(sub.getGrade());
-                totalPoints += gradePoint * sub.getCredits();
-                totalCredits += sub.getCredits();
-            }
-        }
+        // 3. Prepare the data for the SGPA trend chart
+        Map<String, Double> chartData = prepareChartData();
 
-        return (totalCredits > 0) ? totalPoints / totalCredits : 0.0;
+        // 4. Use the model to calculate the overall CGPA
+        double overallCGPA = currentStudent.calculateCGPA();
+
+        // 5. Tell the View to display the results
+        view.displayChart(chartData);
+        view.displayOverallCGPA(overallCGPA);
     }
 
-    // 3. Subject-wise average across all semesters
-    public Map<String, Double> getSubjectAverages(List<Semester> semesters) {
-        Map<String, List<Integer>> subjectMarks = new HashMap<>();
-
-        for (Semester sem : semesters) {
-            for (Subject sub : sem.getSubjects()) {
-                subjectMarks.putIfAbsent(sub.getSubjectName(), new ArrayList<>());
-                subjectMarks.get(sub.getSubjectName()).add(sub.getMarks());
-            }
+    /**
+     * Processes the list of semesters to create a map suitable for charting.
+     * Each entry in the map is (Semester Name -> SGPA).
+     */
+    private Map<String, Double> prepareChartData() {
+        Map<String, Double> data = new LinkedHashMap<>(); // Use LinkedHashMap to keep semesters in order
+        for (Semester sem : currentStudent.getSemesters()) {
+            data.put("Sem " + sem.getSemesterNumber(), sem.calculateSGPA());
         }
-
-        // Calculate averages
-        Map<String, Double> subjectAverages = new HashMap<>();
-        for (String subject : subjectMarks.keySet()) {
-            List<Integer> marks = subjectMarks.get(subject);
-            double avg = marks.stream().mapToInt(Integer::intValue).average().orElse(0.0);
-            subjectAverages.put(subject, avg);
-        }
-
-        return subjectAverages;
-    }
-
-    // 4. Grade distribution across all semesters
-    public Map<String, Integer> getGradeDistribution(List<Semester> semesters) {
-        Map<String, Integer> distribution = new HashMap<>();
-
-        for (Semester sem : semesters) {
-            for (Subject sub : sem.getSubjects()) {
-                String grade = sub.getGrade();
-                distribution.put(grade, distribution.getOrDefault(grade, 0) + 1);
-            }
-        }
-
-        return distribution;
-    }
-
-    // Helper: convert grade (A, B, C…) to numeric points
-    private double convertGradeToPoint(String grade) {
-        switch (grade.toUpperCase()) {
-            case "A+": return 10.0;
-            case "A":  return 9.0;
-            case "B+": return 8.0;
-            case "B":  return 7.0;
-            case "C":  return 6.0;
-            case "D":  return 5.0;
-            case "E":  return 4.0;
-            default:   return 0.0;
-        }
+        return data;
     }
 }
