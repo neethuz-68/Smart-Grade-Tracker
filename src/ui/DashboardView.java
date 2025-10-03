@@ -1,4 +1,4 @@
-package com.gradetracker.view;
+package ui;
 
 import javax.swing.*;
 import java.awt.*;
