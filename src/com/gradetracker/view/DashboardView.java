@@ -4,16 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-/**
- * The main dashboard view for the application.
- * This screen appears after a successful login and serves as the main navigation hub.
- */
 public class DashboardView extends JFrame {
 
     private JButton gradeEntryButton;
     private JButton analysisButton;
     private JButton plannerButton;
-    private JButton logoutButton; // Added a logout button for better usability
+    private JButton logoutButton; 
 
     public DashboardView() {
         // --- Frame Setup ---

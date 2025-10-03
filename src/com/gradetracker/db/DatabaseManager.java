@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 public class DatabaseManager {
     private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/grade_tracker";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "15N@va86"; // <-- Double-check this password!
+    private static final String DB_PASSWORD = "15N@va86"; 
 
     static {
         try {

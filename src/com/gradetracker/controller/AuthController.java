@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import com.gradetracker.model.Student;
 import com.gradetracker.dao.StudentDAO;
 import com.gradetracker.view.LoginView;
-import com.gradetracker.view.DashboardView;
+import com.gradetracker.view.dashboard_2;
 
 public class AuthController implements ActionListener {
     private LoginView view;
@@ -38,19 +38,19 @@ public class AuthController implements ActionListener {
         if (student != null) {
             //view.displayMessage("Login Successful!");
             view.dispose();
-            DashboardView dashboard = new DashboardView();
+            dashboard_2 dashboard = new dashboard_2();
             dashboard.setVisible(true);
         } else {
             view.displayMessage("Invalid username or password.");
         }
 
-        if (student != null) {
+        /*if (student != null) {
             view.displayMessage("Login Successful!");
             view.dispose(); 
             StudentDAO studentDAO = new StudentDAO(); // Assuming you have access or create it
             Student fullStudentData = studentDAO.getStudentData(student); // You will need to implement this method
 
-    // 2. Create the DashboardView
+    // 2. Create the dashboard_2
             DashboardView dashboardView = new DashboardView();
     
     // 3. Create the DashboardController to manage it
@@ -62,6 +62,6 @@ public class AuthController implements ActionListener {
         } else {
     // If login fails...
             view.displayMessage("Invalid username or password.");
-        }
+        } */
     }
 }

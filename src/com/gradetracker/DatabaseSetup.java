@@ -3,7 +3,7 @@ Before running this code, make sure you have:
 
 A MySQL server running.
 
-An empty database created (e.g., named gradetracker_db).
+An empty database created (e.g., named grade_tracker).
 
 The MySQL Connector/J .jar file added to your project's classpath.
 
