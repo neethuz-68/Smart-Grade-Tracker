@@ -36,11 +36,31 @@ public class AuthController implements ActionListener {
         Student student = studentDAO.validateUser(email, password);
 
         if (student != null) {
-            view.displayMessage("Login Successful!");
+            //view.displayMessage("Login Successful!");
             view.dispose();
             DashboardView dashboard = new DashboardView();
             dashboard.setVisible(true);
         } else {
+            view.displayMessage("Invalid username or password.");
+        }
+
+        if (student != null) {
+            view.displayMessage("Login Successful!");
+            view.dispose(); 
+            StudentDAO studentDAO = new StudentDAO(); // Assuming you have access or create it
+            Student fullStudentData = studentDAO.getStudentData(student); // You will need to implement this method
+
+    // 2. Create the DashboardView
+            DashboardView dashboardView = new DashboardView();
+    
+    // 3. Create the DashboardController to manage it
+            new DashboardController(dashboardView, fullStudentData);
+    
+    // 4. Make the dashboard visible
+            dashboardView.setVisible(true);
+
+        } else {
+    // If login fails...
             view.displayMessage("Invalid username or password.");
         }
     }

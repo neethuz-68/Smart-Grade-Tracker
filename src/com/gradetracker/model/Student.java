@@ -10,7 +10,6 @@ public class Student {
     private String password;
     private List<Semester> semesters;
 
-    // --- NEW --- Simpler constructor for new students or for login
     public Student(int studentId, String name, String email, String password) {
         this.studentId = studentId;
         this.name = name;
@@ -19,7 +18,6 @@ public class Student {
         this.semesters = new ArrayList<>(); // Initialize to an empty list
     }
 
-    // Full constructor (still useful)
     public Student(int studentId, String name, String email, String password, List<Semester> semesters) {
         this.studentId = studentId;
         this.name = name;
@@ -28,7 +26,24 @@ public class Student {
         this.semesters = semesters;
     }
 
-    // Getters & Setters
+    public double calculateCGPA() {
+        if (semesters == null || semesters.isEmpty()) {
+            return 0.0;
+        }
+        double totalWeightedPoints = 0.0;
+        double totalCredits = 0.0;
+        for (Semester semester : semesters) {
+            double semesterCredits = 0.0;
+            for (Subject subject : semester.getSubjects()) {
+                semesterCredits += subject.getCredits();
+            }
+            totalWeightedPoints += semester.calculateSGPA() * semesterCredits;
+            totalCredits += semesterCredits;
+        }
+        return (totalCredits == 0) ? 0.0 : totalWeightedPoints / totalCredits;
+    }
+
+    
     public int getStudentId() { return studentId; }
     public void setStudentId(int studentId) { this.studentId = studentId; }
 

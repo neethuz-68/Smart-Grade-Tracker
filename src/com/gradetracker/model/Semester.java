@@ -26,12 +26,19 @@ public class Semester {
         this.subjects = subjects;
     }
 
-    // --- NEW --- Business logic to calculate this semester's GPA
-    /**
-     * Calculates the Grade Point Average (GPA) for this semester.
-     * GPA = (Sum of (Credit * Grade Point)) / (Sum of Credits)
-     * @return The calculated GPA as a double.
-     */
+    public double calculateSGPA() {
+        if (subjects == null || subjects.isEmpty()) {
+            return 0.0;
+        }
+        double totalPoints = 0.0;
+        double totalCredits = 0.0;
+        for (Subject subject : subjects) {
+            totalPoints += subject.getGradePoint() * subject.getCredits();
+            totalCredits += subject.getCredits();
+        }
+        return (totalCredits == 0) ? 0.0 : totalPoints / totalCredits;
+    }
+
     public double calculateGPA() {
         if (subjects == null || subjects.isEmpty()) {
             return 0.0;
@@ -52,7 +59,6 @@ public class Semester {
         return totalPoints / totalCredits;
     }
     
-    // --- NEW --- Convenience method to add a subject
     public void addSubject(Subject subject) {
         if (this.subjects == null) {
             this.subjects = new ArrayList<>();
