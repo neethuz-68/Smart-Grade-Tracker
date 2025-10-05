@@ -1,4 +1,4 @@
-/*package com.gradetracker.controller;
+package com.gradetracker.controller;
 
 import com.gradetracker.dao.SemesterDAO;
 import com.gradetracker.dao.SubjectDAO;
@@ -40,7 +40,6 @@ public class GradeEntryController implements ActionListener {
         newSemester.setSubjects(subjects);
 
         // 3. Save the new semester and its subjects to the database
-        // (This assumes you have created the necessary DAO methods)
         boolean success = semesterDAO.saveSemester(currentStudent.getStudentId(), newSemester);
         if (!success) {
             view.displayMessage("Error: Could not save grades to the database.");
@@ -48,16 +47,13 @@ public class GradeEntryController implements ActionListener {
         }
 
         // 4. Refresh the student's data to include the new semester
-        // (This assumes you have a method to reload a student's data)
         currentStudent = semesterDAO.getStudentWithSemesters(currentStudent.getStudentId());
 
-        // 5. Calculate the SGPA for the semester just entered
         double sgpa = newSemester.calculateSGPA();
 
-        // 6. Calculate the new overall CGPA for the student
         double cgpa = currentStudent.calculateCGPA();
 
         // 7. Display the results back in the View
         view.displayResults(sgpa, cgpa);
     }
-} */
+} 

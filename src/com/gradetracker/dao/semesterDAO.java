@@ -8,7 +8,6 @@ import java.util.List;
 
 public class SemesterDAO {
 
-    // ✅ Create semester for a student
     public boolean createSemester(Semester semester) {
         String sql = "INSERT INTO semester(student_id, semester_no) VALUES (?, ?)";
         try (Connection conn = DatabaseManager.getConnection();
@@ -24,7 +23,6 @@ public class SemesterDAO {
         return false;
     }
 
-    // ✅ Get semester by ID
     public Semester getSemesterById(int id) {
         String sql = "SELECT * FROM semester WHERE semester_id = ?";
         try (Connection conn = DatabaseManager.getConnection();
@@ -44,7 +42,6 @@ public class SemesterDAO {
         return null;
     }
 
-    // ✅ Get all semesters for a student
     public List<Semester> getSemestersByStudent(int studentId) {
         List<Semester> list = new ArrayList<>();
         String sql = "SELECT * FROM semester WHERE student_id = ?";
