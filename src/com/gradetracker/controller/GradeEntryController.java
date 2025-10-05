@@ -1,6 +1,7 @@
 package com.gradetracker.controller;
 
 import com.gradetracker.dao.SemesterDAO;
+import com.gradetracker.dao.SemesterDAOImpl;
 import com.gradetracker.dao.SubjectDAO;
 import com.gradetracker.model.Semester;
 import com.gradetracker.model.Student;
@@ -16,14 +17,11 @@ public class GradeEntryController implements ActionListener {
     private GradeEntryView view;
     private Student currentStudent;
     private SemesterDAO semesterDAO;
-    private SubjectDAO subjectDAO;
 
     public GradeEntryController(GradeEntryView view, Student student) {
         this.view = view;
         this.currentStudent = student;
-        this.semesterDAO = new SemesterDAO(); 
-        this.subjectDAO = new SubjectDAO();
-
+        this.semesterDAO = new SemesterDAOImpl(); 
         this.view.addSaveListener(this);
     }
 
