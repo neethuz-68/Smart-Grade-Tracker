@@ -9,7 +9,7 @@ public class dashboard_2 extends JFrame {
 
     private JButton gradeEntryButton;
     private JButton analysisButton;
-    private JButton targetButton;
+    //private JButton targetButton;
     private JButton logoutButton;
 
     public dashboard_2() {
@@ -60,11 +60,11 @@ public class dashboard_2 extends JFrame {
 
         gradeEntryButton = createNavButton("Grade Entry");
         analysisButton = createNavButton("CGPA Analysis");
-        targetButton = createNavButton("Target CGPA");
+        //targetButton = createNavButton("Target CGPA");
 
         centerPanel.add(createNavCard(gradeEntryButton));
         centerPanel.add(createNavCard(analysisButton));
-        centerPanel.add(createNavCard(targetButton));
+        //centerPanel.add(createNavCard(targetButton));
 
         // Add everything
         background.add(navbar, BorderLayout.NORTH);
@@ -99,9 +99,9 @@ public class dashboard_2 extends JFrame {
 
 
 
-    public void addTargetListener(ActionListener listener) {
+    /*public void addTargetListener(ActionListener listener) {
         targetButton.addActionListener(listener);
-    }
+    }*/
 
     public void addLogoutListener(ActionListener listener) {
         logoutButton.addActionListener(listener);

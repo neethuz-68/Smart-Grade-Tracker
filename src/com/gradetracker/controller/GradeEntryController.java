@@ -2,7 +2,6 @@ package com.gradetracker.controller;
 
 import com.gradetracker.dao.SemesterDAO;
 import com.gradetracker.dao.SemesterDAOImpl;
-import com.gradetracker.dao.SubjectDAO;
 import com.gradetracker.model.Semester;
 import com.gradetracker.model.Student;
 import com.gradetracker.model.Subject;
@@ -21,37 +20,41 @@ public class GradeEntryController implements ActionListener {
     public GradeEntryController(GradeEntryView view, Student student) {
         this.view = view;
         this.currentStudent = student;
-        this.semesterDAO = new SemesterDAOImpl(); 
+        this.semesterDAO = new SemesterDAOImpl();
         this.view.addSaveListener(this);
-    }
+    } 
 
     @Override
     public void actionPerformed(ActionEvent e) {
         handleSaveAndCalculate();
-    }
+    } 
 
     private void handleSaveAndCalculate() {
         int semesterNo = view.getSemesterNumber();
         List<Subject> subjects = view.getSubjectsData();
 
-        Semester newSemester = new Semester(0, semesterNo); 
+        if (semesterNo <= 0 || subjects.isEmpty()) {
+            view.displayMessage("Please enter a valid semester number and at least one subject.");
+            return;
+        }
+
+        Semester newSemester = new Semester(0, semesterNo);
         newSemester.setSubjects(subjects);
 
-        // 3. Save the new semester and its subjects to the database
         boolean success = semesterDAO.saveSemester(currentStudent.getStudentId(), newSemester);
         if (!success) {
             view.displayMessage("Error: Could not save grades to the database.");
             return;
         }
 
-        // 4. Refresh the student's data to include the new semester
-        currentStudent = semesterDAO.getStudentWithSemesters(currentStudent.getStudentId());
+        currentStudent.addSemester(newSemester);
 
         double sgpa = newSemester.calculateSGPA();
-
         double cgpa = currentStudent.calculateCGPA();
 
-        // 7. Display the results back in the View
         view.displayResults(sgpa, cgpa);
+        view.displayMessage("Grades saved successfully!");
+
     }
+
 } 

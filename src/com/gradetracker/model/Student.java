@@ -42,7 +42,12 @@ public class Student {
         }
         return (totalCredits == 0) ? 0.0 : totalWeightedPoints / totalCredits;
     }
-
+    public void addSemester(Semester semester) {
+        if (this.semesters == null) {
+            this.semesters = new ArrayList<>();
+        }
+        this.semesters.add(semester);
+    }
     
     public int getStudentId() { return studentId; }
     public void setStudentId(int studentId) { this.studentId = studentId; }

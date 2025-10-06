@@ -21,19 +21,19 @@ public class DashboardView extends JFrame {
 
         // --- UI Components ---
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(4, 1, 10, 10)); // 4 rows, 1 col, with spacing
+        mainPanel.setLayout(new GridLayout(3, 1, 10, 10)); // 4 rows, 1 col, with spacing
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Add padding
 
         // Initialize buttons
         gradeEntryButton = new JButton("Enter / Edit Grades");
         analysisButton = new JButton("View Performance Analysis");
-        plannerButton = new JButton("Plan Target CGPA");
+        //plannerButton = new JButton("Plan Target CGPA");
         logoutButton = new JButton("Logout");
 
         // Add buttons to the panel
         mainPanel.add(gradeEntryButton);
         mainPanel.add(analysisButton);
-        mainPanel.add(plannerButton);
+        //mainPanel.add(plannerButton);
         mainPanel.add(logoutButton);
 
         // Add the main panel to the frame
@@ -51,9 +51,9 @@ public class DashboardView extends JFrame {
         analysisButton.addActionListener(listener);
     }
 
-    public void addPlannerListener(ActionListener listener) {
+    /*public void addPlannerListener(ActionListener listener) {
         plannerButton.addActionListener(listener);
-    }
+    }*/
 
     public void addLogoutListener(ActionListener listener) {
         logoutButton.addActionListener(listener);
