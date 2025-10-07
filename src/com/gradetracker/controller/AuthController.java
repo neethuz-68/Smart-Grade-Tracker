@@ -21,12 +21,39 @@ public class AuthController implements ActionListener {
     public void actionPerformed(ActionEvent e){
         handleLogin();
     }
+    // Inside AuthController.java
 
-    private void handleLogin() {
-        // --- BUG FIX --- Renamed 'username' to 'email' to match the database query
-        String email = view.getUsername(); // This method gets the text from the "Username" field
+private void handleLogin() {
+String email = view.getUsername(); // This method gets the text from the "Username" field
         String password = view.getPassword();
 
+    Student student = studentDAO.validateUser(email, password);
+
+    if (student != null) {
+        // Login successful!
+        view.dispose(); // Close the login window
+
+        // --- THIS IS THE CRITICAL PART ---
+
+        // 1. Create the DashboardView instance
+        DashboardView dashboardView = new DashboardView();
+        
+        // 2. Create the DashboardController and LINK IT to the view and the logged-in student.
+        //    This step attaches all the button listeners.
+        new DashboardController(dashboardView, student);
+        
+        // 3. Make the dashboard visible.
+        dashboardView.setVisible(true);
+
+    } else {
+        // Login failed.
+        view.displayMessage("Invalid username or password.");
+    }
+}
+
+    /*private void handleLogin() {
+        // --- BUG FIX --- Renamed 'username' to 'email' to match the database query
+        
         if (email.isEmpty() || password.isEmpty()) {
             view.displayMessage("Username and password cannot be empty.");
             return;
@@ -42,7 +69,7 @@ public class AuthController implements ActionListener {
             dashboard.setVisible(true);
         } else {
             view.displayMessage("Invalid username or password.");
-        }
+        }*/
 
         /*if (student != null) {
             view.displayMessage("Login Successful!");
@@ -62,6 +89,6 @@ public class AuthController implements ActionListener {
         } else {
     // If login fails...
             view.displayMessage("Invalid username or password.");
-        } */
-    }
+        } 
+    }*/
 }

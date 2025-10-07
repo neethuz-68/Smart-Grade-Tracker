@@ -37,26 +37,27 @@ public class DashboardView extends JFrame {
 
         // ===== NAVBAR =====
         JPanel navbar = new JPanel(new BorderLayout());
-        navbar.setOpaque(false); // Make navbar transparent
-        navbar.setPreferredSize(new Dimension(0, 80));
+        navbar.setBackground(Color.WHITE); // Kept the white navbar for better visibility of the title
+        navbar.setPreferredSize(new Dimension(0, 70));
         navbar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         JLabel title = new JLabel("Smart Grade Tracker");
-        title.setFont(new Font("SansSerif", Font.BOLD, 28));
+        title.setFont(new Font("Verdana", Font.BOLD, 22));
         title.setForeground(Color.DARK_GRAY);
         navbar.add(title, BorderLayout.WEST);
 
         logoutButton = new JButton("Logout");
-        logoutButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         // ... (styling for logoutButton)
-        navbar.add(logoutButton, BorderLayout.EAST);
+        JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 15));
+        logoutPanel.setBackground(Color.WHITE); // Match navbar color
+        logoutPanel.add(logoutButton);
+        navbar.add(logoutPanel, BorderLayout.EAST);
 
         // ===== CENTER CONTENT (Horizontal Cards) =====
-        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 80, 0)); // Horizontal layout with a gap of 80px
+        JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 80, 0));
         centerPanel.setOpaque(false);
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(150, 0, 0, 0)); // Padding from top
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(150, 0, 0, 0));
 
-        // Create the new custom card-style buttons
         gradeEntryButton = new CardButton("<html><center>Grade Entry +<br/>CGPA Calculation</center></html>");
         analysisButton = new CardButton("<html><center>GPA<br/>Analysis</center></html>");
 
@@ -81,52 +82,66 @@ public class DashboardView extends JFrame {
     public void addLogoutListener(ActionListener listener) {
         logoutButton.addActionListener(listener);
     }
-}
 
-/**
- * A custom JButton class that is drawn as a rounded rectangle to look like a card.
- */
-class CardButton extends JButton {
-    private Color hoverBackgroundColor = new Color(245, 245, 245);
-    private Color pressedBackgroundColor = Color.WHITE;
-
-    public CardButton(String text) {
-        super(text);
-        super.setContentAreaFilled(false);
-        setFocusPainted(false);
-        setBorderPainted(false);
-        setForeground(Color.DARK_GRAY);
-        setFont(new Font("SansSerif", Font.BOLD, 22));
-        setPreferredSize(new Dimension(300, 200));
-
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                setBackground(hoverBackgroundColor);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                setBackground(Color.WHITE);
-            }
-        });
+    public JButton getGradeEntryButton() {
+        return gradeEntryButton;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
-        // Determine color based on button state (pressed, hover, normal)
-        if (getModel().isPressed()) {
-            g2.setColor(pressedBackgroundColor);
-        } else if (getModel().isRollover()) {
-            g2.setColor(hoverBackgroundColor);
-        } else {
-            g2.setColor(getBackground());
+    public JButton getAnalysisButton() {
+        return analysisButton;
+    }
+
+    public JButton getLogoutButton() {
+        return logoutButton;
+    }
+
+    /**
+     * A private inner class for the custom card-style buttons.
+     * It's placed inside DashboardView because it's only used here.
+     */
+    private static class CardButton extends JButton {
+        private final Color hoverBackgroundColor = new Color(245, 245, 245);
+        private final Color pressedBackgroundColor = new Color(230, 230, 230);
+        private final Color normalBackgroundColor = Color.WHITE;
+
+        public CardButton(String text) {
+            super(text);
+            setBackground(normalBackgroundColor);
+            super.setContentAreaFilled(false);
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setForeground(Color.DARK_GRAY);
+            setFont(new Font("SansSerif", Font.BOLD, 22));
+            setPreferredSize(new Dimension(300, 200));
+
+            addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    setBackground(hoverBackgroundColor);
+                }
+
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    setBackground(normalBackgroundColor);
+                }
+            });
         }
-        
-        // Draw the rounded rectangle shape
-        g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
-        g2.dispose();
 
-        super.paintComponent(g);
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            if (getModel().isPressed()) {
+                g2.setColor(pressedBackgroundColor);
+            } else if (getModel().isRollover()) {
+                g2.setColor(hoverBackgroundColor);
+            } else {
+                g2.setColor(getBackground());
+            }
+
+            g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
+            g2.dispose();
+
+            super.paintComponent(g);
+        }
     }
-}
+} 
