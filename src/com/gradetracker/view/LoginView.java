@@ -106,6 +106,14 @@ public class LoginView extends JFrame {
         loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
         loginButton.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+              loginButton.setBackground(new Color(123, 104, 238)); // medium slate blue
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+              loginButton.setBackground(new Color(72, 61, 139));
+            }
+        });
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.CENTER;

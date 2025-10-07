@@ -1,3 +1,5 @@
 dashboard controller
 dashboard view
 sign up 
+grade entry screen
+analysis screen
