@@ -7,7 +7,6 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class StudentDAO {
-    // Inside StudentDAO.java...
 
 public Student validateUser(String email, String password) {
     String sql = "SELECT student_id, name, email FROM Student WHERE email = ? AND password = ?";
