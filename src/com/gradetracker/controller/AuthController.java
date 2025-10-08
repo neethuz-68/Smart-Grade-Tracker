@@ -23,6 +23,7 @@ public class AuthController implements ActionListener {
     }
     // Inside AuthController.java
 
+    
 private void handleLogin() {
 String email = view.getUsername(); // This method gets the text from the "Username" field
         String password = view.getPassword();
@@ -50,7 +51,7 @@ String email = view.getUsername(); // This method gets the text from the "Userna
         view.displayMessage("Invalid username or password.");
     }
 }
-
+    
     /*private void handleLogin() {
         // --- BUG FIX --- Renamed 'username' to 'email' to match the database query
         

@@ -13,7 +13,7 @@ public class LoginView extends JFrame {
     public LoginView() {
         // --- Frame Setup ---
         setTitle("Smart Grade Tracker - Login");
-        setSize(480, 350);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -45,7 +45,7 @@ public class LoginView extends JFrame {
                 super.paintComponent(g);
             }
         };
-        panel.setPreferredSize(new Dimension(360, 240));
+        panel.setPreferredSize(new Dimension(600, 400));//360,240
         panel.setBackground(new Color(255, 255, 255, 230)); // semi-transparent white
         panel.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
 
@@ -128,7 +128,10 @@ public class LoginView extends JFrame {
 
     // --- Public methods ---
     public String getUsername() { return usernameField.getText(); }
-    public char[] getPassword() { return passwordField.getPassword(); }
+    public String getPassword() {
+        return String.valueOf(passwordField.getPassword());
+    }
+    
     public void displayMessage(String message) { JOptionPane.showMessageDialog(this, message); }
     public void clearFields() { usernameField.setText(""); passwordField.setText(""); }
     public void addLoginListener(ActionListener listener) { loginButton.addActionListener(listener); }

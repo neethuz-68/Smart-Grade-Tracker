@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class GradeEntryView extends JFrame {
 
     private JTextField semesterNumberField;
@@ -20,7 +21,9 @@ public class GradeEntryView extends JFrame {
     private JButton saveButton;
     private JButton viewAnalysisButton;
     private JButton logoutButton;
-    private JButton dashboardButton; // <-- NEW: Button declaration
+    private JButton dashboardButton; 
+    private JLabel sgpaLabel;
+    private JLabel cgpaLabel;
 
     public GradeEntryView() {
         // --- Frame Setup ---
