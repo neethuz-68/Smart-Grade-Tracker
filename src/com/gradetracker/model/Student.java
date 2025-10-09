@@ -1,6 +1,6 @@
 package com.gradetracker.model;
 
-import java.util.ArrayList; // Import ArrayList
+import java.util.ArrayList; 
 import java.util.List;
 
 public class Student {
@@ -15,7 +15,7 @@ public class Student {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.semesters = new ArrayList<>(); // Initialize to an empty list
+        this.semesters = new ArrayList<>(); 
     }
 
     public Student(int studentId, String name, String email, String password, List<Semester> semesters) {

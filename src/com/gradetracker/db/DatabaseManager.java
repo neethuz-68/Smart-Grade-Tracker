@@ -12,10 +12,8 @@ public class DatabaseManager {
 
     static {
         try {
-            // Explicitly load the driver
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            // This error will pop-up if the .jar file is not in the classpath
             JOptionPane.showMessageDialog(null, 
                 "MySQL JDBC Driver not found!\nMake sure the connector .jar file is in your classpath.",
                 "Driver Error", JOptionPane.ERROR_MESSAGE);
