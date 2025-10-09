@@ -1,83 +1,76 @@
-package com.gradetracker.model;
+// In file: com/gradecalculator/models/Semester.java
+package com.gradecalculator.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Represents a single academic semester, containing a list of subjects.
- * It includes the logic to calculate the GPA for this specific semester.
- */
 public class Semester {
-    private int semesterId;
-    private int semesterNumber;
-    private List<Subject> subjects;
+    private final int semesterNo;
+    private final List<Enrollment> enrollments;
 
-    // --- NEW --- Simpler constructor
-    public Semester(int semesterId, int semesterNumber) {
-        this.semesterId = semesterId;
-        this.semesterNumber = semesterNumber;
-        this.subjects = new ArrayList<>(); // Initialize to an empty list
+    public Semester(int semesterNo) {
+        this.semesterNo = semesterNo;
+        this.enrollments = new ArrayList<>();
     }
 
-    // Full constructor
-    public Semester(int semesterId, int semesterNumber, List<Subject> subjects) {
-        this.semesterId = semesterId;
-        this.semesterNumber = semesterNumber;
-        this.subjects = subjects;
-    }
-
-    public double calculateSGPA() {
-        if (subjects == null || subjects.isEmpty()) {
-            return 0.0;
+    /**
+     * Adds an enrollment record (a subject taken) to this semester.
+     * @param enrollment The enrollment to add.
+     */
+    public void addEnrollment(Enrollment enrollment) {
+        // Optional: Check if the enrollment's semester number matches this semester's number.
+        if (enrollment.getSemesterNo() == this.semesterNo) {
+            this.enrollments.add(enrollment);
+        } else {
+            System.err.println("Warning: Attempted to add enrollment from semester "
+                + enrollment.getSemesterNo() + " to semester " + this.semesterNo);
         }
-        double totalPoints = 0.0;
-        double totalCredits = 0.0;
-        for (Subject subject : subjects) {
-            totalPoints += subject.getGradePoint() * subject.getCredits();
-            totalCredits += subject.getCredits();
-        }
-        return (totalCredits == 0) ? 0.0 : totalPoints / totalCredits;
     }
 
-    public double calculateGPA() {
-        if (subjects == null || subjects.isEmpty()) {
+    /**
+     * Calculates the Semester Grade Point Average (SGPA) for this semester.
+     * The logic is now contained entirely within the Semester class.
+     * @return The calculated SGPA as a double.
+     */
+    public double calculateSgpa() {
+        if (enrollments.isEmpty()) {
             return 0.0;
         }
 
-        double totalPoints = 0.0;
-        double totalCredits = 0.0;
-
-        for (Subject subject : subjects) {
-            totalPoints += subject.getCredits() * subject.getGradePoint();
-            totalCredits += subject.getCredits();
-        }
-
+        double totalQualityPoints = enrollments.stream()
+            .mapToDouble(Enrollment::getQualityPoints)
+            .sum();
+            
+        int totalCredits = enrollments.stream()
+            .mapToInt(e -> e.getSubject().getCredit())
+            .sum();
+            
         if (totalCredits == 0) {
             return 0.0;
         }
+        
+        return totalQualityPoints / totalCredits;
+    }
 
-        return totalPoints / totalCredits;
+    // --- Getters ---
+    public int getSemesterNo() {
+        return semesterNo;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        // Return a copy to prevent external modification
+        return new ArrayList<>(enrollments);
     }
     
-    public void addSubject(Subject subject) {
-        if (this.subjects == null) {
-            this.subjects = new ArrayList<>();
-        }
-        this.subjects.add(subject);
+    public int getTotalCredits() {
+        return enrollments.stream()
+            .mapToInt(e -> e.getSubject().getCredit())
+            .sum();
     }
-
-    // --- Getters & Setters ---
-    public int getSemesterId() { return semesterId; }
-    public void setSemesterId(int semesterId) { this.semesterId = semesterId; }
-
-    public int getSemesterNumber() { return semesterNumber; }
-    public void setSemesterNumber(int semesterNumber) { this.semesterNumber = semesterNumber; }
-
-    public List<Subject> getSubjects() { return subjects; }
-    public void setSubjects(List<Subject> subjects) { this.subjects = subjects; }
-
-    @Override
-    public String toString() {
-        return "Semester " + semesterNumber + " with " + (subjects != null ? subjects.size() : 0) + " subjects.";
+    
+    public double getTotalQualityPoints() {
+         return enrollments.stream()
+            .mapToDouble(Enrollment::getQualityPoints)
+            .sum();
     }
 }

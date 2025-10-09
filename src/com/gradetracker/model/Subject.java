@@ -1,54 +1,35 @@
-package com.gradetracker.model;
+// In file: com/gradecalculator/models/Subject.java
+package com.gradecalculator.models;
 
-/**
- * Represents a single subject, including its name, credits,
- * and the grade achieved.
- */
 public class Subject {
-    private int subjectId;
-    private String subjectName;
-    private float credits;      // Changed from int to float
-    private int marks;
-    private String grade;
-    private float gradePoint;   // --- NEW --- Added gradePoint for calculations
+    private final int subId;
+    private final String subjectName;
+    private final int credit;
 
-    // Constructor updated
-    public Subject(int subjectId, String subjectName, float credits, int marks, String grade, float gradePoint) {
-        this.subjectId = subjectId;
+    public Subject(int subId, String subjectName, int credit) {
+        this.subId = subId;
         this.subjectName = subjectName;
-        this.credits = credits;
-        this.marks = marks;
-        this.grade = grade;
-        this.gradePoint = gradePoint;
+        this.credit = credit;
     }
 
-    // --- NEW --- Getter & Setter for gradePoint
-    public float getGradePoint() {
-        return gradePoint;
+    // --- Getters ---
+    public int getSubId() {
+        return subId;
     }
 
-    public void setGradePoint(float gradePoint) {
-        this.gradePoint = gradePoint;
+    public String getSubjectName() {
+        return subjectName;
     }
 
-    // --- Getters & Setters ---
-    public int getSubjectId() { return subjectId; }
-    public void setSubjectId(int subjectId) { this.subjectId = subjectId; }
-
-    public String getSubjectName() { return subjectName; }
-    public void setSubjectName(String subjectName) { this.subjectName = subjectName; }
-
-    public float getCredits() { return credits; } // Return type changed
-    public void setCredits(float credits) { this.credits = credits; } // Parameter type changed
-
-    public int getMarks() { return marks; }
-    public void setMarks(int marks) { this.marks = marks; }
-
-    public String getGrade() { return grade; }
-    public void setGrade(String grade) { this.grade = grade; }
+    public int getCredit() {
+        return credit;
+    }
 
     @Override
     public String toString() {
-        return subjectName + " (" + grade + ", Grade Point: " + gradePoint + ", " + credits + " credits)";
+        return "Subject{" +
+               "subjectName='" + subjectName + '\'' +
+               ", credit=" + credit +
+               '}';
     }
 }

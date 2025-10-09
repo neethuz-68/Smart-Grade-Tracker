@@ -1,71 +1,89 @@
-package com.gradetracker.model;
+// In file: com/gradecalculator/models/Student.java
+package com.gradecalculator.models;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap; // TreeMap keeps semesters sorted by number
 
 public class Student {
-    private int studentId;
-    private String name;
-    private String email;
-    private String password;
-    private List<Semester> semesters;
+    private final int stId;
+    private final String name;
+    private final String email;
+    // Use a Map for efficient lookup of semesters by their number
+    private final Map<Integer, Semester> semesters;
 
-    public Student(int studentId, String name, String email, String password) {
-        this.studentId = studentId;
+    public Student(int stId, String name, String email) {
+        this.stId = stId;
         this.name = name;
         this.email = email;
-        this.password = password;
-        this.semesters = new ArrayList<>(); 
-    }
-
-    public Student(int studentId, String name, String email, String password, List<Semester> semesters) {
-        this.studentId = studentId;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.semesters = semesters;
-    }
-
-    public double calculateCGPA() {
-        if (semesters == null || semesters.isEmpty()) {
-            return 0.0;
-        }
-        double totalWeightedPoints = 0.0;
-        double totalCredits = 0.0;
-        for (Semester semester : semesters) {
-            double semesterCredits = 0.0;
-            for (Subject subject : semester.getSubjects()) {
-                semesterCredits += subject.getCredits();
-            }
-            totalWeightedPoints += semester.calculateSGPA() * semesterCredits;
-            totalCredits += semesterCredits;
-        }
-        return (totalCredits == 0) ? 0.0 : totalWeightedPoints / totalCredits;
-    }
-    public void addSemester(Semester semester) {
-        if (this.semesters == null) {
-            this.semesters = new ArrayList<>();
-        }
-        this.semesters.add(semester);
+        this.semesters = new TreeMap<>(); // TreeMap will keep semesters sorted by key (semester number)
     }
     
-    public int getStudentId() { return studentId; }
-    public void setStudentId(int studentId) { this.studentId = studentId; }
+    /**
+     * Adds a new enrollment. It finds the correct semester or creates a new one
+     * if it's the first enrollment for that semester.
+     * @param enrollment The enrollment record to add.
+     */
+    public void addEnrollment(Enrollment enrollment) {
+        int semesterNo = enrollment.getSemesterNo();
+        
+        // Get the semester from the map. If it doesn't exist, create it.
+        Semester semester = this.semesters.computeIfAbsent(semesterNo, k -> new Semester(k));
+        
+        // Add the enrollment to that semester
+        semester.addEnrollment(enrollment);
+    }
+    
+    /**
+     * Calculates the SGPA for a given semester.
+     * This method now DELEGATES the calculation to the specific Semester object.
+     * @param semesterNo The semester to calculate the GPA for.
+     * @return The calculated SGPA, or 0.0 if the semester is not found.
+     */
+    public double getSgpa(int semesterNo) {
+        Semester semester = semesters.get(semesterNo);
+        if (semester != null) {
+            return semester.calculateSgpa();
+        }
+        return 0.0; // Or throw an exception, e.g., IllegalArgumentException
+    }
+    
+    /**
+     * Calculates the Cumulative Grade Point Average (CGPA) for the student.
+     * This method now aggregates the results from all Semester objects.
+     * @return The calculated CGPA.
+     */
+    public double calculateCgpa() {
+        double totalQualityPoints = semesters.values().stream()
+            .mapToDouble(Semester::getTotalQualityPoints)
+            .sum();
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+        int totalCredits = semesters.values().stream()
+            .mapToInt(Semester::getTotalCredits)
+            .sum();
+            
+        if (totalCredits == 0) {
+            return 0.0;
+        }
+        
+        return totalQualityPoints / totalCredits;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    // --- Getters ---
+    public int getStId() {
+        return stId;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getName() {
+        return name;
+    }
 
-    public List<Semester> getSemesters() { return semesters; }
-    public void setSemesters(List<Semester> semesters) { this.semesters = semesters; }
-
-    @Override
-    public String toString() {
-        return "Student{" + "id=" + studentId + ", name='" + name + "', semesters=" + (semesters != null ? semesters.size() : 0) + "}";
+    public String getEmail() {
+        return email;
+    }
+    
+    public List<Semester> getAllSemesters() {
+        return new ArrayList<>(semesters.values());
     }
 }
