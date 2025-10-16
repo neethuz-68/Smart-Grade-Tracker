@@ -1,4 +1,3 @@
-// In file: com/gradecalculator/models/Student.java
 package com.gradecalculator.models;
 
 import java.util.ArrayList;
