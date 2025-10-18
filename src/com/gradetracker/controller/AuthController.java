@@ -2,7 +2,12 @@ package com.gradetracker.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
+import com.gradetracker.model.Enrollment;
 import com.gradetracker.model.Student;
+import com.gradetracker.dao.EnrollmentDAO;
+import com.gradetracker.dao.EnrollmentDAOImpl;
 import com.gradetracker.dao.StudentDAO;
 import com.gradetracker.view.LoginView;
 import com.gradetracker.view.DashboardView;
@@ -30,26 +35,24 @@ String email = view.getUsername(); // This method gets the text from the "Userna
 
     Student student = studentDAO.validateUser(email, password);
 
-    if (student != null) {
-        // Login successful!
-        view.dispose(); // Close the login window
+if (student != null) { // If validateUser was successful
+    view.dispose();
 
-        // --- THIS IS THE CRITICAL PART ---
+    // Use the EnrollmentDAO to get all academic records for this student
+    EnrollmentDAO enrollmentDAO = new EnrollmentDAOImpl(); // Or your class name
+    List<Enrollment> enrollments = enrollmentDAO.findByStudentId(student.getStId());
 
-        // 1. Create the DashboardView instance
-        DashboardView dashboardView = new DashboardView();
-        
-        // 2. Create the DashboardController and LINK IT to the view and the logged-in student.
-        //    This step attaches all the button listeners.
-        new DashboardController(dashboardView, student);
-        
-        // 3. Make the dashboard visible.
-        dashboardView.setVisible(true);
-
-    } else {
-        // Login failed.
-        view.displayMessage("Invalid username or password.");
+    // Add these records to the student object
+    for (Enrollment en : enrollments) {
+        student.addEnrollment(en);
     }
+    
+    // Now you have a fully populated student object
+    DashboardView dashboardView = new DashboardView();
+    new DashboardController(dashboardView, student); // Pass the full object
+    dashboardView.setVisible(true);
+}
+
 }
     
     /*private void handleLogin() {

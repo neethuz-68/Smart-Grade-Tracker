@@ -1,8 +1,11 @@
 package com.gradetracker.controller;
 
+import com.gradetracker.dao.EnrollmentDAO;
+import com.gradetracker.dao.EnrollmentDAOImpl;
 import com.gradetracker.dao.SemesterDAO;
 import com.gradetracker.dao.StudentDAO;
 import com.gradetracker.dao.SemesterDAOImpl;
+import com.gradetracker.model.Enrollment;
 import com.gradetracker.model.Semester;
 import com.gradetracker.model.Student;
 import com.gradetracker.model.Subject;
@@ -57,33 +60,36 @@ public class GradeEntryController {
         }
     }
 
-    private void handleSaveAndCalculate() {
-        int semesterNo = view.getSemesterNumber();
-        List<Subject> subjects = view.getSubjectsData();
+   
+private void handleSaveAndCalculate() {
+    int semesterNo = view.getSemesterNumber();
+    List<Subject> subjectsFromView = view.getSubjectsData(); // This might need modification
+    
+    EnrollmentDAO enrollmentDAO = new EnrollmentDAOImpl();
+    boolean allSuccess = true;
+
+    // Loop through each subject from the form
+    for (Subject subject : subjectsFromView) {
+        // Create an Enrollment object for this subject
+        Enrollment enrollment = new Enrollment(
+            0, // enrollmentId is auto-generated
+            currentStudent.getStId(),
+            subject.getSubId(), // You'll need a way to get the subject ID
+            semesterNo,
+            subject.getGrade() // You'll need the Grade object or letter
+        );
         
-        if (semesterNo <= 0 || subjects.isEmpty()) {
-            view.displayMessage("Please enter a valid semester number and at least one subject.");
-            return;
+        // Save this single enrollment record to the database
+        if (!enrollmentDAO.createEnrollment(enrollment)) {
+            allSuccess = false;
+            break; // Stop if one fails
         }
-        
-        Semester newSemester = new Semester(0, semesterNo);
-        newSemester.setSubjects(subjects);
-        
-        boolean success = semesterDAO.saveSemester(currentStudent.getStudentId(), newSemester);
-        
-        if (!success) {
-            view.displayMessage("Error: Could not save grades to the database.");
-            return;
-        }
-        
-        currentStudent.addSemester(newSemester);
-        double sgpa = newSemester.calculateSGPA();
-        double cgpa = currentStudent.calculateCGPA();
-        
-        view.displayResults(sgpa, cgpa);
-        view.displayMessage("Grades saved successfully!");
     }
 
+    if (allSuccess) {
+        // ... refresh data and recalculate SGPA/CGPA ...
+    }
+}
     private void handleDashboardNavigation() {
         //view.dispose();
         DashboardView dashboardView = new DashboardView();
