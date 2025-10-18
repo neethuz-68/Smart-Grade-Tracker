@@ -1,5 +1,9 @@
-package com.gradetracker.dao;
+package com.gradecalculator.dao;
 
-public class EnrollmentDAO {
-    
+import com.gradecalculator.models.Enrollment;
+import java.util.List;
+
+public interface EnrollmentDAO {
+    boolean createEnrollment(Enrollment enrollment);
+    List<Enrollment> findByStudentId(int studentId);
 }
