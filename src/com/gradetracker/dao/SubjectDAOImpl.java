@@ -1,42 +1,62 @@
-package com.gradetracker.dao;
+package dao.impl;
 
-import com.gradetracker.db.DatabaseManager;
-import com.gradetracker.model.Subject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import dao.SubjectDAO;
+import model.Subject;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectDAOImpl implements SubjectDAO {
 
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database_name";
+    private static final String USER = "your_username";
+    private static final String PASS = "your_password";
+
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, USER, PASS);
+    }
+
     @Override
-    public List<Subject> getSubjectsForSemester(int semesterId) {
-        List<Subject> subjects = new ArrayList<>();
-        // This query joins Subject and Grade to get all necessary info
-        String sql = "SELECT s.subject_id, s.subject_name, s.credit, g.grade_letter, g.grade_point " +
-                     "FROM Subject s JOIN Grade g ON s.subject_id = g.subject_id " +
-                     "WHERE s.semester_id = ?";
+    public Subject getSubjectByName(String subjectName) {
+        String sql = "SELECT * FROM subject WHERE subject_name = ?";
+        Subject subject = null;
 
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, semesterId);
-            ResultSet rs = pstmt.executeQuery();
+            stmt.setString(1, subjectName);
+            ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                subjects.add(new Subject(
-                    rs.getInt("subject_id"),
-                    rs.getString("subject_name"),
-                    rs.getFloat("credit"),
-                    0, // Marks are not stored/retrieved in this query
-                    rs.getString("grade_letter"),
-                    rs.getFloat("grade_point")
-                ));
+            if (rs.next()) {
+                subject = new Subject();
+                subject.setSubId(rs.getInt("sub_id"));
+                subject.setSubjectName(rs.getString("subject_name"));
+                subject.setCredit(rs.getInt("credit"));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Or handle more gracefully
+            e.printStackTrace();
+        }
+        return subject;
+    }
+
+    @Override
+    public List<Subject> getAllSubjects() {
+        List<Subject> subjects = new ArrayList<>();
+        String sql = "SELECT * FROM subject";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Subject subject = new Subject();
+                subject.setSubId(rs.getInt("sub_id"));
+                subject.setSubjectName(rs.getString("subject_name"));
+                subject.setCredit(rs.getInt("credit"));
+                subjects.add(subject);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return subjects;
     }
