@@ -1,4 +1,4 @@
-package com.gradecalculator.models;
+package com.gradetracker.model;
 
 import java.util.ArrayList;
 import java.util.List;

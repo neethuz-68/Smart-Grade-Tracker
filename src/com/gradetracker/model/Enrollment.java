@@ -1,5 +1,5 @@
 // In file: com/gradecalculator/models/Enrollment.java
-package com.gradecalculator.models;
+package com.gradetracker.model;
 
 public class Enrollment {
     private final int enrollmentId;

@@ -1,4 +1,4 @@
-package com.gradecalculator.models;
+package com.gradetracker.model;
 
 /**
  * Represents a single entry from the Grade lookup table.

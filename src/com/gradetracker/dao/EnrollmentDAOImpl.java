@@ -1,11 +1,11 @@
 
- package com.gradecalculator.dao;
+ package com.gradetracker.dao;
 
-import com.gradecalculator.dao.EnrollmentDAO;
-import com.gradecalculator.db.DatabaseManager; // Assuming your connection manager
-import com.gradecalculator.models.Enrollment;
-import com.gradecalculator.models.Grade;
-import com.gradecalculator.models.Subject;
+import com.gradetracker.dao.EnrollmentDAO;
+import com.gradetracker.db.DatabaseManager; // Assuming your connection manager
+import com.gradetracker.model.Enrollment;
+import com.gradetracker.model.Grade;
+import com.gradetracker.model.Subject;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
-package dao.impl;
+package com.gradetracker.dao;
 
-import dao.SubjectDAO;
-import model.Subject;
+import com.gradetracker.dao.SubjectDAO;
+import com.gradetracker.model.Subject;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

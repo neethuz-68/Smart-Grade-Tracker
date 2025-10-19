@@ -1,6 +1,6 @@
-package com.gradecalculator.dao;
+package com.gradetracker.dao;
 
-import com.gradecalculator.models.Enrollment;
+import com.gradetracker.model.Enrollment;
 import java.util.List;
 
 public interface EnrollmentDAO {

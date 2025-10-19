@@ -1,5 +1,4 @@
-// In file: com/gradecalculator/models/Semester.java
-package com.gradecalculator.models;
+package com.gradetracker.model;
 
 import java.util.ArrayList;
 import java.util.List;

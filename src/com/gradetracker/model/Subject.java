@@ -1,5 +1,5 @@
 // In file: com/gradecalculator/models/Subject.java
-package com.gradecalculator.models;
+package com.gradetracker.model;
 
 public class Subject {
     private final int subId;

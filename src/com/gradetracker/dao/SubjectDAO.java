@@ -1,7 +1,7 @@
-package dao;
+package com.gradetracker.dao;
 
 import java.util.List;
-import model.Subject;
+import com.gradetracker.model.Subject;
 
 public interface SubjectDAO {
     // Fetch a subject by its name
