@@ -12,10 +12,6 @@ public class Semester {
         this.enrollments = new ArrayList<>();
     }
 
-    /**
-     * Adds an enrollment record (a subject taken) to this semester.
-     * @param enrollment The enrollment to add.
-     */
     public void addEnrollment(Enrollment enrollment) {
         // Optional: Check if the enrollment's semester number matches this semester's number.
         if (enrollment.getSemesterNo() == this.semesterNo) {
@@ -25,12 +21,7 @@ public class Semester {
                 + enrollment.getSemesterNo() + " to semester " + this.semesterNo);
         }
     }
-
-    /**
-     * Calculates the Semester Grade Point Average (SGPA) for this semester.
-     * The logic is now contained entirely within the Semester class.
-     * @return The calculated SGPA as a double.
-     */
+\
     public double calculateSgpa() {
         if (enrollments.isEmpty()) {
             return 0.0;
@@ -50,14 +41,12 @@ public class Semester {
         
         return totalQualityPoints / totalCredits;
     }
-
-    // --- Getters ---
+\
     public int getSemesterNo() {
         return semesterNo;
     }
 
     public List<Enrollment> getEnrollments() {
-        // Return a copy to prevent external modification
         return new ArrayList<>(enrollments);
     }
     

@@ -15,7 +15,6 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
 
     @Override
     public boolean createEnrollment(Enrollment enrollment) {
-        // SQL to insert into your specific 'enrollment' table
         String sql = "INSERT INTO enrollment (st_id, sub_id, semester_no, grade) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DatabaseManager.getConnection();

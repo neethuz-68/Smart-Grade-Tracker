@@ -1,35 +1,39 @@
 package com.gradetracker.controller;
 
-import com.gradetracker.dao.EnrollmentDAO;
-import com.gradetracker.dao.EnrollmentDAOImpl;
-import com.gradetracker.dao.SemesterDAO;
-import com.gradetracker.dao.StudentDAO;
-import com.gradetracker.dao.SemesterDAOImpl;
-import com.gradetracker.model.Enrollment;
-import com.gradetracker.model.Semester;
-import com.gradetracker.model.Student;
-import com.gradetracker.model.Subject;
-import com.gradetracker.view.LoginView;
+import com.gradetracker.dao.*;
+import com.gradetracker.model.*;
+import com.gradetracker.view.AnalysisView;
+import com.gradetracker.view.DashboardView;
 import com.gradetracker.view.GradeEntryView;
-import com.gradetracker.view.DashboardView; 
+import com.gradetracker.view.LoginView;
+import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Map;
 
-public class GradeEntryController {
-    private GradeEntryView view;
-    private Student currentStudent;
-    private SemesterDAO semesterDAO;
+public class GradeEntryController { 
+
+    private final GradeEntryView view;
+    private final Student currentStudent;
+    private final EnrollmentDAO enrollmentDAO;
+    private final SubjectDAO subjectDAO;
+    private final GradeDAO gradeDAO;
 
     public GradeEntryController(GradeEntryView view, Student student) {
         this.view = view;
         this.currentStudent = student;
-        this.semesterDAO = new SemesterDAOImpl();
+        
+        this.enrollmentDAO = new EnrollmentDAOImpl();
+        this.subjectDAO = new SubjectDAOImpl();
+        this.gradeDAO = new GradeDAOImpl();
         
         this.view.addSaveListener(new SaveListener());
         this.view.addDashboardListener(new DashboardListener());
-        this.view.addViewAnalysisListener(new ViewAnalysisListener());
+        this.view.addViewAnalysisListener(new ViewAnalysisListener()); 
         this.view.addLogoutListener(new LogoutListener());
+
+        populateSubjectsDropdown();
     }
 
     private class SaveListener implements ActionListener {
@@ -45,65 +49,74 @@ public class GradeEntryController {
             handleDashboardNavigation();
         }
     }
-
     private class ViewAnalysisListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            view.displayMessage("View Analysis feature - implement as needed");
+            handleViewAnalysis();
         }
     }
-
     private class LogoutListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             handleLogout();
         }
     }
+    private void populateSubjectsDropdown() {
+        List<Subject> allSubjects = subjectDAO.getAllSubjects();
+        view.populateSubjectDropdown(allSubjects);
+    }
 
-   
-private void handleSaveAndCalculate() {
-    int semesterNo = view.getSemesterNumber();
-    List<Subject> subjectsFromView = view.getSubjectsData(); // This might need modification
-    
-    EnrollmentDAO enrollmentDAO = new EnrollmentDAOImpl();
-    boolean allSuccess = true;
+    private void handleSaveAndCalculate() {
+        int semesterNo = view.getSemesterNumber();
+        GradeEntryView.SubjectData data = view.getSingleSubjectData(); 
 
-    // Loop through each subject from the form
-    for (Subject subject : subjectsFromView) {
-        // Create an Enrollment object for this subject
-        Enrollment enrollment = new Enrollment(
-            0, // enrollmentId is auto-generated
-            currentStudent.getStId(),
-            subject.getSubId(), // You'll need a way to get the subject ID
-            semesterNo,
-            subject.getGrade() // You'll need the Grade object or letter
-        );
-        
-        // Save this single enrollment record to the database
-        if (!enrollmentDAO.createEnrollment(enrollment)) {
-            allSuccess = false;
-            break; // Stop if one fails
+        if (semesterNo <= 0 || data == null) {
+            view.displayMessage("Please select a semester, subject, and grade.");
+            return;
+        }
+
+        Subject subject = subjectDAO.getSubjectByName(data.name());
+        Map<String, Grade> gradeMap = gradeDAO.getAllGrades();
+        Grade grade = gradeMap.get(data.gradeLetter().toUpperCase());
+
+        if (subject == null || grade == null) {
+            view.displayMessage("Invalid subject name or grade letter.");
+            return;
+        }
+
+        Enrollment enrollment = new Enrollment(0, semesterNo, subject, grade);
+
+        if (enrollmentDAO.createEnrollment(enrollment)) {
+            currentStudent.addEnrollment(enrollment);
+
+            double sgpa = currentStudent.getSgpa(semesterNo);
+            double cgpa = currentStudent.calculateCgpa();
+
+            view.displayResults(sgpa, cgpa);
+            view.displayMessage("Subject saved successfully!");
+        } else {
+            view.displayMessage("Error: Could not save subject.");
         }
     }
 
-    if (allSuccess) {
-        // ... refresh data and recalculate SGPA/CGPA ...
-    }
-}
     private void handleDashboardNavigation() {
-        //view.dispose();
+        view.dispose(); 
         DashboardView dashboardView = new DashboardView();
         new DashboardController(dashboardView, currentStudent);
         dashboardView.setVisible(true);
-        
+    }
+    
+    private void handleViewAnalysis() {
+        AnalysisView analysisView = new AnalysisView();
+        new AnalysisController(analysisView, currentStudent);
+        analysisView.setVisible(true);
     }
 
     private void handleLogout() {
         view.dispose();
-        LoginView loginview = new LoginView();
-        StudentDAO studentDAO = new StudentDAO();
-        new AuthController(loginview, studentDAO);
-        loginview.setVisible(true);
-        //view.displayMessage("Logged out successfully!");
+        LoginView loginView = new LoginView();
+        StudentDAO studentDAO = new StudentDAOImpl(); 
+        new AuthController(loginView, studentDAO);
+        loginView.setVisible(true);
     }
 }

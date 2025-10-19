@@ -17,7 +17,6 @@ public class DashboardView extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // --- Robust Image Loading ---
         URL imageUrl = getClass().getResource("/resources/bg1.jpg");
         ImageIcon bgIcon = (imageUrl != null) ? new ImageIcon(imageUrl) : null;
         Image bgImage = (bgIcon != null) ? bgIcon.getImage() : null;

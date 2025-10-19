@@ -1,37 +1,33 @@
 package com.gradetracker.dao;
 
-import com.gradetracker.dao.SubjectDAO;
+import com.gradetracker.db.DatabaseManager; 
 import com.gradetracker.model.Subject;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectDAOImpl implements SubjectDAO {
-
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database_name";
-    private static final String USER = "your_username";
-    private static final String PASS = "your_password";
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASS);
-    }
 
     @Override
     public Subject getSubjectByName(String subjectName) {
         String sql = "SELECT * FROM subject WHERE subject_name = ?";
         Subject subject = null;
 
-        try (Connection conn = getConnection();
+        try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, subjectName);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                subject = new Subject();
-                subject.setSubId(rs.getInt("sub_id"));
-                subject.setSubjectName(rs.getString("subject_name"));
-                subject.setCredit(rs.getInt("credit"));
+                subject = new Subject(
+                    rs.getInt("sub_id"),
+                    rs.getString("subject_name"),
+                    rs.getInt("credit")
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,15 +40,16 @@ public class SubjectDAOImpl implements SubjectDAO {
         List<Subject> subjects = new ArrayList<>();
         String sql = "SELECT * FROM subject";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Subject subject = new Subject();
-                subject.setSubId(rs.getInt("sub_id"));
-                subject.setSubjectName(rs.getString("subject_name"));
-                subject.setCredit(rs.getInt("credit"));
+                Subject subject = new Subject(
+                    rs.getInt("sub_id"),
+                    rs.getString("subject_name"),
+                    rs.getInt("credit")
+                );
                 subjects.add(subject);
             }
         } catch (SQLException e) {
