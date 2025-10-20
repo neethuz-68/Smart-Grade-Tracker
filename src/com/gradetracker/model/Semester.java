@@ -21,7 +21,7 @@ public class Semester {
                 + enrollment.getSemesterNo() + " to semester " + this.semesterNo);
         }
     }
-\
+
     public double calculateSgpa() {
         if (enrollments.isEmpty()) {
             return 0.0;
@@ -41,7 +41,7 @@ public class Semester {
         
         return totalQualityPoints / totalCredits;
     }
-\
+
     public int getSemesterNo() {
         return semesterNo;
     }
