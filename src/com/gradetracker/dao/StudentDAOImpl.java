@@ -13,7 +13,6 @@ public class StudentDAOImpl implements StudentDAO {
     public Student validateUser(String email, String password) {
         String query = "SELECT st_id, name, email FROM student WHERE email = ? AND password = ?";
         
-        // Use the central DatabaseManager to get a connection
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             
@@ -22,19 +21,16 @@ public class StudentDAOImpl implements StudentDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-        // --- THIS IS THE FIX ---
-        // Pass the password to the constructor
         return new Student(
             rs.getInt("st_id"),
             rs.getString("name"),
             rs.getString("email"),
-            password // <-- The missing argument
+            password
         );
     }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        // If user is not found or an error occurs, return null
         return null;
     }
 
@@ -47,7 +43,7 @@ public class StudentDAOImpl implements StudentDAO {
             
             ps.setString(1, student.getName());
             ps.setString(2, student.getEmail());
-            ps.setString(3, student.getPassword()); // Note: Passwords should be hashed in a real app
+            ps.setString(3, student.getPassword()); 
             
             int rowsInserted = ps.executeUpdate();
             return rowsInserted > 0;

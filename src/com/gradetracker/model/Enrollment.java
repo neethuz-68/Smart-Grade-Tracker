@@ -1,4 +1,3 @@
-// In file: com/gradecalculator/models/Enrollment.java
 package com.gradetracker.model;
 
 public class Enrollment {
@@ -16,16 +15,10 @@ public class Enrollment {
         this.grade = grade;
     }
 
-    /**
-     * Calculates the quality points for this enrollment.
-     * Quality Points = Subject Credit * Grade Point
-     * @return The calculated quality points as a double.
-     */
     public double getQualityPoints() {
         return this.subject.getCredit() * this.grade.getGradePoint();
     }
 
-    // --- Getters ---
     public int getEnrollmentId() {
         return enrollmentId;
     }
@@ -33,7 +26,7 @@ public class Enrollment {
     public int getStId() {
         return stId;
     }
-    
+
     public int getSemesterNo() {
         return semesterNo;
     }

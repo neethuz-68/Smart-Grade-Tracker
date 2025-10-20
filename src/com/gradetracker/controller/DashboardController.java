@@ -3,13 +3,14 @@ package com.gradetracker.controller;
 import com.gradetracker.dao.StudentDAO;
 import com.gradetracker.dao.StudentDAOImpl; 
 import com.gradetracker.model.Student;
-//import com.gradetracker.view.AnalysisView;
+import com.gradetracker.view.AnalysisView;
 import com.gradetracker.view.DashboardView;
 import com.gradetracker.view.GradeEntryView;
 import com.gradetracker.view.LoginView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 public class DashboardController implements ActionListener {
 
@@ -20,7 +21,7 @@ public class DashboardController implements ActionListener {
         this.view = view;
         this.currentStudent = student;
         this.view.addGradeEntryListener(this);
-        //this.view.addAnalysisListener(this);
+        this.view.addAnalysisListener(this);
         this.view.addLogoutListener(this);
     }
 
@@ -29,9 +30,9 @@ public class DashboardController implements ActionListener {
         Object source = e.getSource();
         if (source == view.getGradeEntryButton()) {
             openGradeEntryScreen();
-        } /*else if (source == view.getAnalysisButton()) {
+        } else if (source == view.getAnalysisButton()) {
             openAnalysisScreen();
-        }*/ else if (source == view.getLogoutButton()) {
+        } else if (source == view.getLogoutButton()) {
             handleLogout();
         }
     }
@@ -42,11 +43,25 @@ public class DashboardController implements ActionListener {
         gradeEntryView.setVisible(true);
     }
 
-    /*private void openAnalysisScreen() {
-        AnalysisView analysisView = new AnalysisView();
-        new Analysis(analysisView, currentStudent);
-        analysisView.setVisible(true);
-    }*/
+    private void openAnalysisScreen() {
+    // 1. Create the view. It has no dependencies.
+    AnalysisView analysisView = new AnalysisView();
+    analysisView.setTitle("Performance Analysis - " + currentStudent.getName());
+
+    // 2. Create the controller.
+    AnalysisController analysisController = new AnalysisController();
+
+    // 3. Use the controller to get the data.
+    Map<Integer, Double> sgpaData = analysisController.getSgpaBySemester(currentStudent);
+    double overallCGPA = analysisController.getOverallCgpa(currentStudent);
+
+    // 4. Pass the data to the view for display.
+    analysisView.displayChart(sgpaData);
+    analysisView.displayOverallCGPA(overallCGPA);
+
+    // 5. Make the view visible.
+    analysisView.setVisible(true);
+}
 
     private void handleLogout() {
         view.dispose(); 

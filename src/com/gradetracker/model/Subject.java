@@ -1,4 +1,3 @@
-// In file: com/gradecalculator/models/Subject.java
 package com.gradetracker.model;
 
 public class Subject {
@@ -11,8 +10,10 @@ public class Subject {
         this.subjectName = subjectName;
         this.credit = credit;
     }
-
-    // --- Getters ---
+    @Override
+    public String toString() {
+        return this.subjectName;
+    }
     public int getSubId() {
         return subId;
     }
@@ -25,11 +26,4 @@ public class Subject {
         return credit;
     }
 
-    @Override
-    public String toString() {
-        return "Subject{" +
-               "subjectName='" + subjectName + '\'' +
-               ", credit=" + credit +
-               '}';
-    }
 }

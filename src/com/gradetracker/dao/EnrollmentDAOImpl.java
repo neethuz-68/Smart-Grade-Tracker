@@ -2,7 +2,7 @@
  package com.gradetracker.dao;
 
 import com.gradetracker.dao.EnrollmentDAO;
-import com.gradetracker.db.DatabaseManager; // Assuming your connection manager
+import com.gradetracker.db.DatabaseManager; 
 import com.gradetracker.model.Enrollment;
 import com.gradetracker.model.Grade;
 import com.gradetracker.model.Subject;
@@ -20,7 +20,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, enrollment.getStId()); // Assumes Enrollment model has getStId()
+            pstmt.setInt(1, enrollment.getStId()); 
             pstmt.setInt(2, enrollment.getSubject().getSubId());
             pstmt.setInt(3, enrollment.getSemesterNo());
             pstmt.setString(4, enrollment.getGrade().getLetterGrade());
@@ -35,7 +35,6 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
     @Override
     public List<Enrollment> findByStudentId(int studentId) {
         List<Enrollment> enrollments = new ArrayList<>();
-        // This single JOIN query gets all the data needed to build the objects
         String sql = "SELECT e.enrollment_id,e.st_id, e.semester_no, " +
                        "s.sub_id, s.subject_name, s.credit, " +
                        "g.grade, g.grade_point " +
@@ -52,7 +51,6 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                // 1. Create the inner objects from the JOINed data
                 Subject subject = new Subject(
                     rs.getInt("sub_id"),
                     rs.getString("subject_name"),
@@ -63,7 +61,6 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
                     rs.getFloat("grade_point")
                 );
 
-                // 2. Create the main Enrollment object
                 Enrollment enrollment = new Enrollment(rs.getInt("enrollment_id"),rs.getInt("st_id"),rs.getInt("semester_no"),subject,grade );
                 enrollments.add(enrollment);
             }

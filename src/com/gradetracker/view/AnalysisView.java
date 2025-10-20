@@ -1,51 +1,82 @@
 package com.gradetracker.view;
 
-import com.gradetracker.model.Student;
-import com.gradetracker.controller.AnalysisController;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
+import java.util.LinkedHashMap; // Import for the GraphPanel data
 
-/**
- * Displays a graphical SGPA analysis chart for the logged-in student.
- */
 public class AnalysisView extends JFrame {
 
-    private final Student loggedInStudent;
-    private final AnalysisController analysisController;
+    private JLabel overallCgpaLabel;
+    private GraphPanel graphPanel;
 
-    public AnalysisView(Student student, AnalysisController analysisController) {
-        this.loggedInStudent = student;
-        this.analysisController = analysisController;
-
-        setTitle("SGPA Analysis - " + student.getName());
+    /**
+     * Constructor for the AnalysisView. Sets up the window and UI components.
+     */
+    public AnalysisView() {
+        setTitle("Performance Analysis");
         setSize(800, 600);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        initUI();
+        // Main panel with a border layout
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
+
+        // Panel for the overall CGPA label at the top
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        topPanel.setBackground(Color.WHITE);
+        topPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        overallCgpaLabel = new JLabel("Overall CGPA: --");
+        overallCgpaLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        topPanel.add(overallCgpaLabel);
+
+        // The graph panel will be in the center
+        graphPanel = new GraphPanel();
+
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+        mainPanel.add(graphPanel, BorderLayout.CENTER);
+
+        this.add(mainPanel);
     }
 
-    private void initUI() {
-        Map<Integer, Double> sgpaData = analysisController.getSgpaBySemester(loggedInStudent);
-        add(new GraphPanel(sgpaData));
+    /**
+     * Called by the controller to pass the chart data to the view.
+     * @param data A map where the key is the semester number and the value is the SGPA.
+     */
+    public void displayChart(Map<Integer, Double> data) {
+        graphPanel.setData(data);
+        repaint(); // Redraw the component with the new data
     }
 
-    // --- Inner Panel for Graph Drawing ---
-    static class GraphPanel extends JPanel {
-        private final Map<Integer, Double> sgpaData;
+    /**
+     * Called by the controller to display the overall CGPA.
+     * @param cgpa The calculated overall CGPA.
+     */
+    public void displayOverallCGPA(double cgpa) {
+        overallCgpaLabel.setText(String.format("Overall CGPA: %.2f", cgpa));
+    }
 
-        public GraphPanel(Map<Integer, Double> sgpaData) {
-            this.sgpaData = sgpaData;
+    /**
+     * A private inner class to handle the custom drawing of the line graph.
+     */
+    private static class GraphPanel extends JPanel {
+        private Map<Integer, Double> sgpaData;
+
+        public GraphPanel() {
+            this.sgpaData = new LinkedHashMap<>(); // Initialize to an empty map
             setBackground(Color.WHITE);
+        }
+
+        public void setData(Map<Integer, Double> sgpaData) {
+            this.sgpaData = sgpaData;
         }
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             if (sgpaData == null || sgpaData.isEmpty()) {
-                g.drawString("No SGPA data available", getWidth() / 2 - 50, getHeight() / 2);
+                g.drawString("No SGPA data available to display.", getWidth() / 2 - 100, getHeight() / 2);
                 return;
             }
 
@@ -55,11 +86,9 @@ public class AnalysisView extends JFrame {
             int width = getWidth();
             int height = getHeight();
             int padding = 60;
-            int labelPadding = 40;
             int pointRadius = 6;
 
             double maxSGPA = 10.0;
-            double minSGPA = 0.0;
             int semesters = sgpaData.size();
 
             // Draw axes
@@ -67,30 +96,25 @@ public class AnalysisView extends JFrame {
             g2.drawLine(padding, height - padding, width - padding, height - padding); // X-axis
             g2.drawLine(padding, padding, padding, height - padding); // Y-axis
 
-            // Axis labels
-            g2.drawString("Semester", width / 2 - 20, height - 20);
-            g2.drawString("SGPA", 10, padding - 10);
-
             // Plot points
             int i = 0;
-            int prevX = 0, prevY = 0;
+            int prevX = -1, prevY = -1;
 
             for (Map.Entry<Integer, Double> entry : sgpaData.entrySet()) {
                 int semester = entry.getKey();
                 double sgpa = entry.getValue();
 
-                // Convert to coordinates
-                int x = padding + (i * (width - 2 * padding) / (semesters - 1));
-                int y = (int) ((height - padding) - ((sgpa - minSGPA) / (maxSGPA - minSGPA)) * (height - 2 * padding));
+                int x = padding + (i * (width - 2 * padding) / (semesters > 1 ? semesters - 1 : 1));
+                int y = (int) ((height - padding) - (sgpa / maxSGPA) * (height - 2 * padding));
 
                 // Draw point
                 g2.setColor(new Color(100, 150, 255));
                 g2.fillOval(x - pointRadius, y - pointRadius, pointRadius * 2, pointRadius * 2);
 
-                // Label
+                // Label point and semester
                 g2.setColor(Color.BLACK);
-                g2.drawString(String.format("%.2f", sgpa), x - 10, y - 10);
-                g2.drawString("S" + semester, x - 10, height - padding + 20);
+                g2.drawString(String.format("%.2f", sgpa), x - 15, y - 15);
+                g2.drawString("Sem " + semester, x - 20, height - padding + 20);
 
                 // Connect with previous point
                 if (i > 0) {
@@ -104,12 +128,12 @@ public class AnalysisView extends JFrame {
                 i++;
             }
 
-            // Draw Y-axis ticks
+            // Draw Y-axis ticks and labels
             g2.setColor(Color.GRAY);
             for (int j = 0; j <= 10; j++) {
-                int y = (int) ((height - padding) - (j / 10.0) * (height - 2 * padding));
-                g2.drawLine(padding - 5, y, padding + 5, y);
-                g2.drawString(String.valueOf(j), padding - 25, y + 5);
+                int yTick = (int) ((height - padding) - (j / 10.0) * (height - 2 * padding));
+                g2.drawLine(padding - 5, yTick, padding, yTick);
+                g2.drawString(String.valueOf(j), padding - 25, yTick + 5);
             }
         }
     }

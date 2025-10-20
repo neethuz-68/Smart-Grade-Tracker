@@ -28,7 +28,7 @@ public class DashboardView extends JFrame {
                 if (bgImage != null) {
                     g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
                 } else {
-                    g.setColor(new Color(230, 230, 250)); // Fallback Lavender color
+                    g.setColor(new Color(230, 230, 250)); 
                     g.fillRect(0, 0, getWidth(), getHeight());
                 }
             }
@@ -36,7 +36,7 @@ public class DashboardView extends JFrame {
 
         // ===== NAVBAR =====
         JPanel navbar = new JPanel(new BorderLayout());
-        navbar.setBackground(Color.WHITE); // Kept the white navbar for better visibility of the title
+        navbar.setBackground(Color.WHITE); 
         navbar.setPreferredSize(new Dimension(0, 70));
         navbar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
@@ -94,10 +94,6 @@ public class DashboardView extends JFrame {
         return logoutButton;
     }
 
-    /**
-     * A private inner class for the custom card-style buttons.
-     * It's placed inside DashboardView because it's only used here.
-     */
     private static class CardButton extends JButton {
         private final Color hoverBackgroundColor = new Color(245, 245, 245);
         private final Color pressedBackgroundColor = new Color(230, 230, 230);

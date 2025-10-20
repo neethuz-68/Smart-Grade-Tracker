@@ -14,8 +14,8 @@ import java.util.List;
 public class GradeEntryView extends JFrame {
 
     private JTextField semesterNumberField;
-    private JComboBox<Subject> subjectDropdown; // <-- REPLACED JTable
-    private JTextField gradeField;            // <-- NEW field for grade letter
+    private JComboBox<Subject> subjectDropdown; 
+    private JTextField gradeField;            
     private JButton saveButton;
     private JButton viewAnalysisButton;
     private JButton logoutButton;
@@ -23,15 +23,12 @@ public class GradeEntryView extends JFrame {
     private JLabel sgpaLabel;
     private JLabel cgpaLabel;
 
-    // A simple record to hold the raw data from the single entry form
     public record SubjectData(Subject subject, String gradeLetter) {}
 
     public GradeEntryView() {
-        // --- Frame, Background, and Navbar setup (remains the same) ---
         setTitle("Enter Semester Grades");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        // ... (Background and Navbar code is the same as your last version)
         URL imageUrl = getClass().getResource("/resources/bg1.jpg");
         ImageIcon bgIcon = (imageUrl != null) ? new ImageIcon(imageUrl) : null;
         Image bgImage = (bgIcon != null) ? bgIcon.getImage() : null;
@@ -59,7 +56,6 @@ public class GradeEntryView extends JFrame {
         rightNavPanel.add(logoutButton);
         navbar.add(rightNavPanel, BorderLayout.EAST);
 
-        // --- Main Content Card ---
         JPanel contentCard = new JPanel(new GridBagLayout());
         contentCard.setBackground(new Color(255, 255, 255, 220));
         contentCard.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
@@ -67,7 +63,6 @@ public class GradeEntryView extends JFrame {
         gbc.insets = new Insets(15, 20, 15, 20);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // --- Semester Input Field ---
         semesterNumberField = new JTextField(15);
         semesterNumberField.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), "Enter Semester Number"));
         gbc.gridx = 0;
@@ -75,7 +70,6 @@ public class GradeEntryView extends JFrame {
         gbc.gridwidth = 2;
         contentCard.add(semesterNumberField, gbc);
 
-        // --- NEW: Single Subject Entry Form ---
         JPanel entryFormPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         entryFormPanel.setOpaque(false);
         
@@ -96,7 +90,6 @@ public class GradeEntryView extends JFrame {
         gbc.gridy = 1;
         contentCard.add(entryFormPanel, gbc);
 
-        // --- Results Display Panel (no change) ---
         JPanel resultsPanel = new JPanel(new GridLayout(1, 2, 20, 0));
         resultsPanel.setOpaque(false);
         sgpaLabel = createResultLabel("SGPA");
@@ -106,14 +99,12 @@ public class GradeEntryView extends JFrame {
         gbc.gridy = 2;
         contentCard.add(resultsPanel, gbc);
         
-        // --- View Analysis Button ---
         viewAnalysisButton = new JButton("View Full Analysis");
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         contentCard.add(viewAnalysisButton, gbc);
 
-        // --- Final Layout ---
         JPanel centerContainer = new JPanel(new GridBagLayout());
         centerContainer.setOpaque(false);
         centerContainer.add(contentCard);
@@ -121,20 +112,12 @@ public class GradeEntryView extends JFrame {
         background.add(centerContainer, BorderLayout.CENTER);
         this.add(background);
     }
-    
-    // --- Public methods for the Controller ---
-
-    // NEW: Method for the controller to populate the dropdown
     public void populateSubjectDropdown(List<Subject> subjects) {
-        // Clear existing items
         subjectDropdown.removeAllItems();
-        // Add all subjects from the database
         for (Subject subject : subjects) {
             subjectDropdown.addItem(subject);
         }
     }
-
-    // MODIFIED: This method now gets data from the new single-entry form
     public SubjectData getSingleSubjectData() {
         Subject selectedSubject = (Subject) subjectDropdown.getSelectedItem();
         String gradeLetter = gradeField.getText();
@@ -144,20 +127,15 @@ public class GradeEntryView extends JFrame {
         return new SubjectData(selectedSubject, gradeLetter);
     }
 
-   /* public List<Subject> getSubjectsData() {
-    List<Subject> subjects = new ArrayList<>();
-    for (int i = 0; i < tableModel.getRowCount(); i++) {
-        String name = (String) tableModel.getValueAt(i, 0);
-        int credits = Integer.parseInt((String) tableModel.getValueAt(i, 1));
-        
-        // This constructor call now matches your Subject.java class
-        subjects.add(new Subject(0, name, credits)); 
-    }
-    return subjects;
-}*/
-    
-    // --- Other methods (createResultLabel, getters, listeners, etc. remain the same) ---
-    private JLabel createResultLabel(String title) { /* ... same as before ... */ return new JLabel(); }
+    private JLabel createResultLabel(String title) {
+    JLabel label = new JLabel(" -- ", SwingConstants.CENTER);
+    label.setFont(new Font("SansSerif", Font.BOLD, 20));
+    label.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(Color.GRAY), title,
+            TitledBorder.CENTER, TitledBorder.TOP));
+    label.setPreferredSize(new Dimension(150, 80));
+    return label;
+}
     public int getSemesterNumber() { try { return Integer.parseInt(semesterNumberField.getText()); } catch (NumberFormatException e) { return -1; }}
     public void displayResults(double sgpa, double cgpa) { sgpaLabel.setText(String.format("%.2f", sgpa)); cgpaLabel.setText(String.format("%.2f", cgpa)); }
     public void addSaveListener(ActionListener listener) { saveButton.addActionListener(listener); }
