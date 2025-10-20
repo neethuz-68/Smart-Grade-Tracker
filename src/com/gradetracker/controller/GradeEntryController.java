@@ -30,7 +30,7 @@ public class GradeEntryController {
         
         this.view.addSaveListener(new SaveListener());
         this.view.addDashboardListener(new DashboardListener());
-        this.view.addViewAnalysisListener(new ViewAnalysisListener()); 
+        //this.view.addViewAnalysisListener(new ViewAnalysisListener()); 
         this.view.addLogoutListener(new LogoutListener());
 
         populateSubjectsDropdown();
@@ -49,12 +49,12 @@ public class GradeEntryController {
             handleDashboardNavigation();
         }
     }
-    private class ViewAnalysisListener implements ActionListener {
+   /* private class ViewAnalysisListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             handleViewAnalysis();
         }
-    }
+    }*/
     private class LogoutListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -74,17 +74,19 @@ public class GradeEntryController {
             view.displayMessage("Please select a semester, subject, and grade.");
             return;
         }
+        Subject subject = data.subject();
 
-        Subject subject = subjectDAO.getSubjectByName(data.name());
+
         Map<String, Grade> gradeMap = gradeDAO.getAllGrades();
-        Grade grade = gradeMap.get(data.gradeLetter().toUpperCase());
+    Grade grade = gradeMap.get(data.gradeLetter().toUpperCase());
 
-        if (subject == null || grade == null) {
-            view.displayMessage("Invalid subject name or grade letter.");
-            return;
-        }
+    if (grade == null) {
+        view.displayMessage("Invalid grade letter entered.");
+        return;
+    }
 
-        Enrollment enrollment = new Enrollment(0, semesterNo, subject, grade);
+
+        Enrollment enrollment = new Enrollment(currentStudent.getStId(),currentStudent.getStId(),semesterNo,subject,grade);
 
         if (enrollmentDAO.createEnrollment(enrollment)) {
             currentStudent.addEnrollment(enrollment);
@@ -106,11 +108,11 @@ public class GradeEntryController {
         dashboardView.setVisible(true);
     }
     
-    private void handleViewAnalysis() {
+    /*private void handleViewAnalysis() {
         AnalysisView analysisView = new AnalysisView();
         new AnalysisController(analysisView, currentStudent);
         analysisView.setVisible(true);
-    }
+    }*/
 
     private void handleLogout() {
         view.dispose();

@@ -36,7 +36,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
     public List<Enrollment> findByStudentId(int studentId) {
         List<Enrollment> enrollments = new ArrayList<>();
         // This single JOIN query gets all the data needed to build the objects
-        String sql = "SELECT e.enrollment_id, e.semester_no, " +
+        String sql = "SELECT e.enrollment_id,e.st_id, e.semester_no, " +
                        "s.sub_id, s.subject_name, s.credit, " +
                        "g.grade, g.grade_point " +
                        "FROM enrollment e " +
@@ -64,12 +64,7 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
                 );
 
                 // 2. Create the main Enrollment object
-                Enrollment enrollment = new Enrollment(
-                    rs.getInt("enrollment_id"),
-                    rs.getInt("semester_no"),
-                    subject,
-                    grade
-                );
+                Enrollment enrollment = new Enrollment(rs.getInt("enrollment_id"),rs.getInt("st_id"),rs.getInt("semester_no"),subject,grade );
                 enrollments.add(enrollment);
             }
         } catch (SQLException e) {

@@ -9,14 +9,15 @@ public class Student {
     private final int stId;
     private final String name;
     private final String email;
-    // Use a Map for efficient lookup of semesters by their number
+    private final String password; 
     private final Map<Integer, Semester> semesters;
 
-    public Student(int stId, String name, String email) {
+    public Student(int stId, String name, String email, String password) {
         this.stId = stId;
         this.name = name;
         this.email = email;
-        this.semesters = new TreeMap<>(); // TreeMap will keep semesters sorted by key (semester number)
+        this.password = password;
+        this.semesters = new TreeMap<>();
     }
     
     /**
@@ -80,6 +81,10 @@ public class Student {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
     
     public List<Semester> getAllSemesters() {

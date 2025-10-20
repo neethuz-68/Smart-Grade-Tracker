@@ -3,7 +3,7 @@ package com.gradetracker.controller;
 import com.gradetracker.dao.StudentDAO;
 import com.gradetracker.dao.StudentDAOImpl; 
 import com.gradetracker.model.Student;
-import com.gradetracker.view.AnalysisView;
+//import com.gradetracker.view.AnalysisView;
 import com.gradetracker.view.DashboardView;
 import com.gradetracker.view.GradeEntryView;
 import com.gradetracker.view.LoginView;
@@ -20,7 +20,7 @@ public class DashboardController implements ActionListener {
         this.view = view;
         this.currentStudent = student;
         this.view.addGradeEntryListener(this);
-        this.view.addAnalysisListener(this);
+        //this.view.addAnalysisListener(this);
         this.view.addLogoutListener(this);
     }
 
@@ -29,9 +29,9 @@ public class DashboardController implements ActionListener {
         Object source = e.getSource();
         if (source == view.getGradeEntryButton()) {
             openGradeEntryScreen();
-        } else if (source == view.getAnalysisButton()) {
+        } /*else if (source == view.getAnalysisButton()) {
             openAnalysisScreen();
-        } else if (source == view.getLogoutButton()) {
+        }*/ else if (source == view.getLogoutButton()) {
             handleLogout();
         }
     }
@@ -42,11 +42,11 @@ public class DashboardController implements ActionListener {
         gradeEntryView.setVisible(true);
     }
 
-    private void openAnalysisScreen() {
+    /*private void openAnalysisScreen() {
         AnalysisView analysisView = new AnalysisView();
         new Analysis(analysisView, currentStudent);
         analysisView.setVisible(true);
-    }
+    }*/
 
     private void handleLogout() {
         view.dispose(); 

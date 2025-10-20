@@ -22,13 +22,15 @@ public class StudentDAOImpl implements StudentDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                // If user is found, create and return the Student object
-                return new Student(
-                    rs.getInt("st_id"),
-                    rs.getString("name"),
-                    rs.getString("email")
-                );
-            }
+        // --- THIS IS THE FIX ---
+        // Pass the password to the constructor
+        return new Student(
+            rs.getInt("st_id"),
+            rs.getString("name"),
+            rs.getString("email"),
+            password // <-- The missing argument
+        );
+    }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -3,12 +3,14 @@ package com.gradetracker.model;
 
 public class Enrollment {
     private final int enrollmentId;
+    private final int stId;
     private final int semesterNo;
     private final Subject subject;
     private final Grade grade;
 
-    public Enrollment(int enrollmentId, int semesterNo, Subject subject, Grade grade) {
+    public Enrollment(int enrollmentId, int stId, int semesterNo, Subject subject, Grade grade) {
         this.enrollmentId = enrollmentId;
+        this.stId = stId;
         this.semesterNo = semesterNo;
         this.subject = subject;
         this.grade = grade;
@@ -26,6 +28,10 @@ public class Enrollment {
     // --- Getters ---
     public int getEnrollmentId() {
         return enrollmentId;
+    }
+    
+    public int getStId() {
+        return stId;
     }
     
     public int getSemesterNo() {
