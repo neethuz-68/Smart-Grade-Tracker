@@ -1,5 +1,25 @@
-dashboard controller
-dashboard view
-sign up 
-grade entry screen
-analysis screen
+MODEL - APARNA (OOP CONCEPTS)
+Your project implements all four fundamental OOP concepts. A great way to present this is to have the team member whose work best demonstrates each concept explain it.
+
+OOP Concepts and Speaker Assignments
+1. Encapsulation
+Who presents: The team member who explains the Model and DAO packages (e.g., Member 4, the Backend Specialist).
+
+What to say: "Encapsulation is the bundling of data and the methods that work on that data into a single unit, a class. We used this to protect our data. For example, in our Student.java class, the name and email attributes are private. The only way to access them is through public getName() and getEmail() methods. This prevents other parts of the program from accidentally corrupting the student's data."
+
+2. Abstraction
+Who presents: A team member who explains a Controller, like the Grade Entry Specialist (Member 1).
+
+What to say: "Abstraction is about hiding complex implementation details. Our controllers use abstraction to work with the database. For example, my GradeEntryController needs to save a new grade. It does this by calling a simple method, enrollmentDAO.createEnrollment(). The controller doesn't need to know anything about the complex SQL queries or JDBC connections happening in the background. That complexity is abstracted away by the DAO."
+
+3. Inheritance
+Who presents: The team member who explains the Views and UI, like the UI/UX & Documentation Lead (Member 5).
+
+What to say: "Inheritance allows us to create new classes based on existing ones to reuse code. We used this for every screen in our application. For instance, our DashboardView class extends JFrame. By doing this, it inherits all the properties and functionality of a window—like a title bar, close buttons, and the ability to be displayed. This saved us a lot of time and is essential for building a Swing GUI."
+
+4. Polymorphism
+Who presents: The team member who explains the DashboardController's navigation logic.
+
+What to say: "Polymorphism means 'many forms,' and it allows us to treat different objects in a uniform way. We used this to handle all the button clicks on our dashboard. Our DashboardController implements ActionListener. Its single actionPerformed method handles events from three different buttons. By checking the event's source (e.getSource()), this one method can perform three different actions: open the grade entry screen, open the analysis screen, or log out. This is one method taking many forms, which is polymorphism."
+
+This approach ensures that each concept is explained by the person most familiar with its practical application in the project, which will make for a stronger and more confident presentation.

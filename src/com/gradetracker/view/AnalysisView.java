@@ -3,27 +3,22 @@ package com.gradetracker.view;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
-import java.util.LinkedHashMap; // Import for the GraphPanel data
+import java.util.LinkedHashMap;
 
 public class AnalysisView extends JFrame {
 
     private JLabel overallCgpaLabel;
     private GraphPanel graphPanel;
 
-    /**
-     * Constructor for the AnalysisView. Sets up the window and UI components.
-     */
     public AnalysisView() {
         setTitle("Performance Analysis");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
         setLocationRelativeTo(null);
 
-        // Main panel with a border layout
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
 
-        // Panel for the overall CGPA label at the top
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.setBackground(Color.WHITE);
         topPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
@@ -31,7 +26,6 @@ public class AnalysisView extends JFrame {
         overallCgpaLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         topPanel.add(overallCgpaLabel);
 
-        // The graph panel will be in the center
         graphPanel = new GraphPanel();
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -40,31 +34,20 @@ public class AnalysisView extends JFrame {
         this.add(mainPanel);
     }
 
-    /**
-     * Called by the controller to pass the chart data to the view.
-     * @param data A map where the key is the semester number and the value is the SGPA.
-     */
     public void displayChart(Map<Integer, Double> data) {
         graphPanel.setData(data);
-        repaint(); // Redraw the component with the new data
+        repaint();
     }
 
-    /**
-     * Called by the controller to display the overall CGPA.
-     * @param cgpa The calculated overall CGPA.
-     */
     public void displayOverallCGPA(double cgpa) {
         overallCgpaLabel.setText(String.format("Overall CGPA: %.2f", cgpa));
     }
 
-    /**
-     * A private inner class to handle the custom drawing of the line graph.
-     */
     private static class GraphPanel extends JPanel {
         private Map<Integer, Double> sgpaData;
 
         public GraphPanel() {
-            this.sgpaData = new LinkedHashMap<>(); // Initialize to an empty map
+            this.sgpaData = new LinkedHashMap<>(); 
             setBackground(Color.WHITE);
         }
 

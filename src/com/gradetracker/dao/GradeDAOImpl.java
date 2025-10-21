@@ -28,7 +28,7 @@ public class GradeDAOImpl implements GradeDAO {
                 gradeMap.put(letterGrade, grade);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Or handle more gracefully
+            e.printStackTrace(); 
         }
         return gradeMap;
     }

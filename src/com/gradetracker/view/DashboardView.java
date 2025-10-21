@@ -34,7 +34,6 @@ public class DashboardView extends JFrame {
             }
         };
 
-        // ===== NAVBAR =====
         JPanel navbar = new JPanel(new BorderLayout());
         navbar.setBackground(Color.WHITE); 
         navbar.setPreferredSize(new Dimension(0, 70));
@@ -46,13 +45,11 @@ public class DashboardView extends JFrame {
         navbar.add(title, BorderLayout.WEST);
 
         logoutButton = new JButton("Logout");
-        // ... (styling for logoutButton)
         JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 15));
-        logoutPanel.setBackground(Color.WHITE); // Match navbar color
+        logoutPanel.setBackground(Color.WHITE); 
         logoutPanel.add(logoutButton);
         navbar.add(logoutPanel, BorderLayout.EAST);
 
-        // ===== CENTER CONTENT (Horizontal Cards) =====
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 80, 0));
         centerPanel.setOpaque(false);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(150, 0, 0, 0));
@@ -63,13 +60,11 @@ public class DashboardView extends JFrame {
         centerPanel.add(gradeEntryButton);
         centerPanel.add(analysisButton);
 
-        // Add everything
         background.add(navbar, BorderLayout.NORTH);
         background.add(centerPanel, BorderLayout.CENTER);
         add(background);
     }
 
-    // ===== Methods for the Controller =====
     public void addGradeEntryListener(ActionListener listener) {
         gradeEntryButton.addActionListener(listener);
     }
