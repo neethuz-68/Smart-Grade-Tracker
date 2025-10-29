@@ -60,6 +60,5 @@ public class AuthController implements ActionListener {
             }
         } else {
             view.displayMessage("Invalid username or password.");
-        }
     }
 }
